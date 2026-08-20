@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
+import Image from "next/image";
 import { hobbies } from "@/data/hobbies";
 
 // Bento layout config: defines position and size of each card
@@ -60,6 +61,90 @@ export default function Hobbies() {
                   boxShadow: "0 10px 30px -10px rgba(0,0,0,0.1)",
                 }}
               >
+                {/* Background photo for badminton card */}
+                {i === 0 && (
+                  <div className="absolute inset-0 overflow-hidden rounded-[2rem]" aria-hidden="true">
+                    <Image
+                      src="/badmin.jpeg"
+                      alt=""
+                      fill
+                      className="object-cover object-center"
+                      style={{ opacity: 0.12, filter: "grayscale(1)", mixBlendMode: "luminosity" }}
+                    />
+                    <div className="absolute inset-0" style={{ background: "linear-gradient(to top, var(--card) 0%, transparent 60%)" }} />
+                  </div>
+                )}
+
+                {/* Background photo for musik card */}
+                {i === 1 && (
+                  <div className="absolute inset-0 overflow-hidden rounded-[2rem]" aria-hidden="true">
+                    <Image
+                      src="/musik.jpeg"
+                      alt=""
+                      fill
+                      className="object-cover object-center"
+                      style={{ opacity: 0.12, filter: "grayscale(1)", mixBlendMode: "luminosity" }}
+                    />
+                    <div className="absolute inset-0" style={{ background: "linear-gradient(to top, var(--card) 0%, transparent 60%)" }} />
+                  </div>
+                )}
+
+                {/* Background photo for padel card */}
+                {i === 2 && (
+                  <div className="absolute inset-0 overflow-hidden rounded-[2rem]" aria-hidden="true">
+                    <Image
+                      src="/padel.jpeg"
+                      alt=""
+                      fill
+                      className="object-cover object-center"
+                      style={{ opacity: 0.12, filter: "grayscale(1)", mixBlendMode: "luminosity" }}
+                    />
+                    <div className="absolute inset-0" style={{ background: "linear-gradient(to top, var(--card) 0%, transparent 60%)" }} />
+                  </div>
+                )}
+
+                {/* Background photo for guitar card */}
+                {i === 3 && (
+                  <div className="absolute inset-0 overflow-hidden rounded-[2rem]" aria-hidden="true">
+                    <Image
+                      src="/gitar.jpeg"
+                      alt=""
+                      fill
+                      className="object-cover object-center"
+                      style={{ opacity: 0.12, filter: "grayscale(1)", mixBlendMode: "luminosity" }}
+                    />
+                    <div className="absolute inset-0" style={{ background: "linear-gradient(to top, var(--card) 0%, transparent 60%)" }} />
+                  </div>
+                )}
+
+                {/* Background photo for bikin kopi card */}
+                {i === 4 && (
+                  <div className="absolute inset-0 overflow-hidden rounded-[2rem]" aria-hidden="true">
+                    <Image
+                      src="/bikinkopi.jpeg"
+                      alt=""
+                      fill
+                      className="object-cover object-center"
+                      style={{ opacity: 0.12, filter: "grayscale(1)", mixBlendMode: "luminosity" }}
+                    />
+                    <div className="absolute inset-0" style={{ background: "linear-gradient(to top, var(--card) 0%, transparent 60%)" }} />
+                  </div>
+                )}
+
+                {/* Background photo for coding card */}
+                {i === 5 && (
+                  <div className="absolute inset-0 overflow-hidden rounded-[2rem]" aria-hidden="true">
+                    <Image
+                      src="/coding.jpeg"
+                      alt=""
+                      fill
+                      className="object-cover object-center"
+                      style={{ opacity: 0.12, filter: "grayscale(1)", mixBlendMode: "luminosity" }}
+                    />
+                    <div className="absolute inset-0" style={{ background: "linear-gradient(to top, var(--card) 0%, transparent 60%)" }} />
+                  </div>
+                )}
+
                 {/* Dynamic animated glow background on hover */}
                 <div
                   className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl"
