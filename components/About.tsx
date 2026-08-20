@@ -119,7 +119,7 @@ export default function About() {
               style={{ border: "1px solid var(--card-border)" }}
             >
               <Image
-                src="/foto-thomas3.png"
+                src="/upd.jpeg"
                 alt="Foto Thomas yang santai dan friendly"
                 fill
                 quality={100}

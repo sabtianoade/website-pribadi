@@ -243,7 +243,7 @@ export default function Hero() {
               {/* Photo */}
               <div className="relative w-full aspect-[4/5]">
                 <Image
-                  src="/foto-thomas.png"
+                  src="/upd-foto1.jpeg"
                   alt="Foto profil Thomas"
                   fill
                   quality={100}
