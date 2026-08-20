@@ -127,7 +127,7 @@ export default function ConfettiButton() {
             animation: `fruitFly ${p.duration}ms cubic-bezier(0.25, 0.1, 0.25, 1) forwards`,
             ["--tx" as string]: `${p.targetX - p.startX}px`,
             ["--ty" as string]: `${p.targetY - p.startY}px`,
-            filter: "drop-shadow(0 0 8px " + p.fruit.color + "99)",
+            filter: "grayscale(1) drop-shadow(0 0 8px rgba(255,255,255,0.4))",
           }}
         >
           {p.fruit.emoji}
