@@ -127,7 +127,7 @@ export default function ConfettiButton() {
             animation: `fruitFly ${p.duration}ms cubic-bezier(0.25, 0.1, 0.25, 1) forwards`,
             ["--tx" as string]: `${p.targetX - p.startX}px`,
             ["--ty" as string]: `${p.targetY - p.startY}px`,
-            filter: "grayscale(1) drop-shadow(0 0 8px rgba(255,255,255,0.4))",
+            filter: "drop-shadow(0 0 8px " + p.fruit.color + "99)",
           }}
         >
           {p.fruit.emoji}
@@ -171,16 +171,16 @@ export default function ConfettiButton() {
       <button
         id="fruit-throw-btn"
         onClick={throwFruits}
-        className="fixed bottom-4 right-4 z-50 w-14 h-14 rounded-full flex items-center justify-center text-2xl shadow-2xl hover:scale-110 active:scale-90 transition-transform"
+        className="fixed bottom-4 right-4 z-50 w-12 h-12 rounded-full flex items-center justify-center text-xl hover:scale-110 active:scale-90 transition-transform"
         style={{
-          background: "linear-gradient(135deg, #f97316 0%, #a855f7 50%, #ec4899 100%)",
-          boxShadow: "0 4px 25px rgba(168,85,247,0.6), 0 0 40px rgba(249,115,22,0.3)",
-          animation: "btnPulse 2.5s ease-in-out infinite",
+          background: "transparent",
+          border: "2px solid white",
+          boxShadow: "none",
         }}
         aria-label="Lempar buah ke layar!"
         title="Lempar buah ke layar! 🍎"
       >
-        🍎
+        <span style={{ filter: "grayscale(1) brightness(10)" }}>🍎</span>
       </button>
 
       <style>{`
