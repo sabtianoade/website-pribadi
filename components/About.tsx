@@ -52,15 +52,19 @@ export default function About() {
               {[
                 {
                   delay: 0.2,
-                  text: "Halo! Namaku Thomas, siswa SMK yang kebetulan jatuh cinta sama dunia teknologi. Aku sekolah di SMKN 1 Pasuruan, ngambil jurusan RPL (Rekayasa Perangkat Lunak), dan tiap hari belajar hal baru tentang ngoding dan desain.",
+                  text: "Halo, salam kenal! Nama panjang gw Muhammad Thomas Ade Andra Sabtiano — panggil Thomas aja, panjang bener soalnya tu nama wkwk. Gw lahir di Pasuruan tanggal 3 Mei 2008, dan gw hobi banget sama badminton.",
                 },
                 {
                   delay: 0.3,
-                  text: "Awalnya iseng-iseng ngulik HTML dan CSS, eh lama-lama malah jadi passion. Sekarang aku suka bangun website yang nggak cuma jalan, tapi juga enak diliat dan nyaman dipake.",
+                  text: "Ada satu kejadian yang gabakal bisa aku lupain karena emang bener-bener itu kenangan banget — tapi gw gabisa cerita di sini karena bakal panjang banget. Mungkin kasih segelas americano bakal gw ceritain wkwk.",
                 },
                 {
                   delay: 0.4,
-                  text: "Di luar ngoding? Biasanya aku dengerin musik, main game, atau ngulik hal-hal baru di internet. Aku percaya bahwa belajar itu bisa dari mana saja dan kapan saja.",
+                  text: "Btw kalian suka ngopi kagak? Cobain kopi buatan gw di Woelandari, bakal nagih dah — bikinnya juga dari hati wkwk. Gw bikin web ini karena gabut dan bingung mau ngarsipin momen-momen di mana lagi, dan seru juga ternyata bikin ginian. Makasih banyak udah mampir ke sini, have fun ya — sorry gw banyak omong wkwk 🙏",
+                },
+                {
+                  delay: 0.5,
+                  text: "Btw tau ga kalian kenapa gw pilih mono gini tema warnanya? Karena emang gw suka hitam putih sih wkwk. Ayo warnain dongg — tapi jangan dengan pelangi basa-basi mu itu ya wkwk 😏",
                 },
               ].map((p, i) => (
                 <motion.p

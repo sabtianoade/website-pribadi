@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Instagram, MapPin, GraduationCap } from "lucide-react";
 import { WhatsAppIcon, TikTokIcon } from "@/components/Icons";
 import MagneticButton from "@/components/MagneticButton";
+import TypewriterText from "@/components/TypewriterText";
 
 export default function Hero() {
   const handleScroll = (id: string) => {
@@ -146,16 +147,19 @@ export default function Hero() {
           </motion.div>
 
           {/* Description */}
-          <motion.p
+          <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.9 }}
+            transition={{ duration: 0.4, delay: 0.9 }}
             className="text-base leading-relaxed max-w-md mx-auto lg:mx-0 mt-2"
-            style={{ color: "var(--muted)" }}
+            style={{ color: "var(--muted)", minHeight: "5rem" }}
           >
-            Aku suka eksplorasi hal-hal baru dan mencoba berbagai pengalaman unik.
-            Website ini adalah ruang kecilku buat berbagi cerita dan hal-hal yang bikin aku jadi aku.
-          </motion.p>
+            <TypewriterText
+              text="Hai, kamu! Makasih ya udah mampir ke sudut kecil gw ini — entah kamu orang asing, temen gw, atau teman deket gw. Intinya terima kasih banyak udah mampir ke keseharian dan kesukaan gw yang gw taruh di sini. Have fun ya 🙏"
+              delay={1100}
+              speed={22}
+            />
+          </motion.div>
 
           {/* CTA buttons */}
           <motion.div
