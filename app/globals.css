@@ -1,0 +1,186 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --background: #FFFFFF;
+    --foreground: #111111;
+    --card: #FAFAFA;
+    --card-border: #E5E5E5;
+    --primary: #333333;
+    --primary-light: #E0E0E0;
+    --secondary: #666666;
+    --accent: #888888;
+    --muted: #737373;
+    --muted-bg: #F5F5F5;
+    --navbar-bg: rgba(255, 255, 255, 0.88);
+    --scrolled-shadow: 0 2px 20px rgba(0,0,0,0.08);
+    --glow: rgba(0, 0, 0, 0.08);
+    --grain: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  }
+
+  .dark {
+    --background: #050505;
+    --foreground: #F5F5F5;
+    --card: #0F0F0F;
+    --card-border: #222222;
+    --primary: #CCCCCC;
+    --primary-light: #1A1A1A;
+    --secondary: #999999;
+    --accent: #777777;
+    --muted: #888888;
+    --muted-bg: #111111;
+    --navbar-bg: rgba(5, 5, 5, 0.88);
+    --scrolled-shadow: 0 2px 20px rgba(0,0,0,0.5);
+    --glow: rgba(255, 255, 255, 0.08);
+  }
+}
+
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-inter), 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background-color: var(--primary);
+    color: #fff;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+}
+
+/* ── Custom Scrollbar ── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 999px; }
+
+/* ── Utilities ── */
+@layer utilities {
+  .gradient-text {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-bg {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+  }
+
+  .glass {
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .dark .glass {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  /* Glow effect */
+  .glow-primary {
+    box-shadow: 0 0 40px var(--glow), 0 4px 20px rgba(0,0,0,0.1);
+  }
+
+  /* Bento grid */
+  .bento-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-auto-rows: minmax(140px, auto);
+    gap: 1rem;
+  }
+
+  .bento-1 { grid-column: span 2; grid-row: span 2; }
+  .bento-2 { grid-column: span 2; }
+  .bento-3 { grid-column: span 2; }
+  .bento-4 { grid-column: span 3; }
+  .bento-5 { grid-column: span 3; grid-row: span 2; }
+  .bento-6 { grid-column: span 3; }
+
+  @media (max-width: 768px) {
+    .bento-grid {
+      grid-template-columns: 1fr 1fr;
+      grid-auto-rows: auto;
+    }
+    .bento-1, .bento-2, .bento-3,
+    .bento-4, .bento-5, .bento-6 {
+      grid-column: span 1;
+      grid-row: span 1;
+    }
+    .bento-1 { grid-column: span 2; }
+    .bento-5 { grid-column: span 2; }
+  }
+
+  @media (max-width: 480px) {
+    .bento-grid {
+      grid-template-columns: 1fr;
+    }
+    .bento-1, .bento-5 { grid-column: span 1; }
+  }
+
+  /* Tag bubble */
+  .tag-bubble {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid transparent;
+  }
+  .tag-bubble:hover {
+    transform: translateY(-3px) scale(1.05);
+  }
+
+  /* Grain texture overlay */
+  .grain::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: var(--grain);
+    pointer-events: none;
+    opacity: 0.5;
+    mix-blend-mode: overlay;
+    border-radius: inherit;
+  }
+
+  /* Sticky note effect */
+  .sticky-note {
+    position: relative;
+    border-radius: 4px 4px 4px 4px;
+  }
+  .sticky-note::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: currentColor;
+    opacity: 0.5;
+    border-radius: 4px 4px 0 0;
+  }
+}
