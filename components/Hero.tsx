@@ -48,7 +48,7 @@ export default function Hero() {
 
   const item = {
     hidden: { opacity: 0, y: 20, filter: "blur(4px)" },
-    show: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.6, type: "spring", bounce: 0.4 } },
+    show: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.6, type: "spring" as const, bounce: 0.4 } },
   };
 
   return (
