@@ -3,6 +3,7 @@
 import { motion } from "motion/react";
 import Image from "next/image";
 import { MapPin, GraduationCap, Heart, Sparkles } from "lucide-react";
+import TiltCard from "@/components/TiltCard";
 
 export default function About() {
   return (
@@ -114,29 +115,31 @@ export default function About() {
             className="flex flex-col gap-4"
           >
             {/* Photo */}
-            <div
-              className="relative w-full aspect-[4/5] rounded-2xl overflow-hidden"
-              style={{ border: "1px solid var(--card-border)" }}
-            >
-              <Image
-                src="/upd.jpeg"
-                alt="Foto Thomas yang santai dan friendly"
-                fill
-                quality={100}
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 380px"
-              />
-              {/* floating badge */}
-              <motion.div
-                animate={{ y: [0, -6, 0] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute top-4 right-4 px-3 py-1.5 rounded-full text-xs font-semibold"
-                style={{ background: "var(--accent)", color: "#1A1A1A" }}
+            <TiltCard>
+              <div
+                className="relative w-full aspect-[4/5] rounded-2xl overflow-hidden"
+                style={{ border: "1px solid var(--card-border)" }}
               >
-                <Sparkles size={12} className="inline mr-1" aria-hidden="true" />
-                Open to chat!
-              </motion.div>
-            </div>
+                <Image
+                  src="/upd.jpeg"
+                  alt="Foto Thomas yang santai dan friendly"
+                  fill
+                  quality={100}
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 380px"
+                />
+                {/* floating badge */}
+                <motion.div
+                  animate={{ y: [0, -6, 0] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                  className="absolute top-4 right-4 px-3 py-1.5 rounded-full text-xs font-semibold"
+                  style={{ background: "var(--accent)", color: "#1A1A1A" }}
+                >
+                  <Sparkles size={12} className="inline mr-1" aria-hidden="true" />
+                  Open to chat!
+                </motion.div>
+              </div>
+            </TiltCard>
 
             {/* Info cards */}
             <div

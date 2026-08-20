@@ -86,8 +86,9 @@ export default function RandomFacts() {
                 <motion.div
                   className="text-3xl w-11 h-11 flex items-center justify-center rounded-xl"
                   style={{ background: `${fact.color}15` }}
-                  whileHover={{ scale: 1.15, rotate: [0, -10, 10, 0] }}
-                  transition={{ duration: 0.4 }}
+                  animate={{ y: [0, -5, 0] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.2 }}
+                  whileHover={{ scale: 1.2, rotate: [0, -15, 15, -15, 15, 0] }}
                   aria-hidden="true"
                 >
                   {fact.emoji}

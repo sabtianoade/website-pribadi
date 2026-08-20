@@ -8,7 +8,9 @@ const bentoConfig = [
   { colSpan: "lg:col-span-2 lg:row-span-2", minH: "min-h-[260px]" }, // 0: Badminton — BIG
   { colSpan: "lg:col-span-2", minH: "min-h-[120px]" },               // 1: Musik
   { colSpan: "lg:col-span-2", minH: "min-h-[120px]" },               // 2: Padel
-  { colSpan: "lg:col-span-4 lg:row-span-2", minH: "min-h-[260px]" }, // 3: Coding — BIG
+  { colSpan: "lg:col-span-2", minH: "min-h-[120px]" },               // 3: Guitar
+  { colSpan: "lg:col-span-2", minH: "min-h-[120px]" },               // 4: Coffee
+  { colSpan: "lg:col-span-4 lg:row-span-2", minH: "min-h-[260px]" }, // 5: Coding — BIG
 ];
 
 export default function Hobbies() {
@@ -40,7 +42,7 @@ export default function Hobbies() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 auto-rows-auto">
           {hobbies.map((hobby, i) => {
             const config = bentoConfig[i] ?? { colSpan: "", minH: "min-h-[120px]" };
-            const isBig = i === 0 || i === 3;
+            const isBig = i === 0 || i === 5;
 
             return (
               <motion.div

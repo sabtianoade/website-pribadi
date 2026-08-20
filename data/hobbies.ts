@@ -44,6 +44,26 @@ export const hobbies: Hobby[] = [
     emoji: "⚪",
   },
   {
+    id: "guitar",
+    title: "Playing Guitar",
+    titleId: "Bermain Gitar",
+    description: "Strumming some chords to relax.",
+    descriptionId: "Main gitar sambil nyanyi buat ngelepas penat setelah seharian ngerjain tugas.",
+    icon: Music, // Just reusing Music icon, won't show anyway because we use emoji
+    color: "var(--muted)",
+    emoji: "🎸",
+  },
+  {
+    id: "coffee",
+    title: "Making Coffee",
+    titleId: "Bikin Kopi",
+    description: "Brewing the perfect cup of coffee.",
+    descriptionId: "Eksperimen bikin racikan kopi paling pas buat nemenin waktu ngoding atau nyantai.",
+    icon: Activity,
+    color: "var(--foreground)",
+    emoji: "☕",
+  },
+  {
     id: "coding",
     title: "Coding",
     titleId: "Ngoding",
