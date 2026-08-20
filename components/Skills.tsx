@@ -33,7 +33,7 @@ export default function Skills() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.3, delay: i * 0.1 }}
-              whileHover={{ y: -3, scale: 1.05 }}
+              whileHover={{ y: -6, scale: 1.08, boxShadow: `0 12px 30px rgba(0,0,0,0.15)` }}
               className="flex items-center gap-3 px-5 py-3 rounded-2xl font-semibold cursor-default"
               style={{
                 background: "var(--card)",
@@ -42,10 +42,16 @@ export default function Skills() {
                 boxShadow: "0 4px 14px rgba(0,0,0,0.05)",
               }}
             >
-              <span className="text-xl">{skill.emoji}</span>
+              <motion.span
+                className="text-xl"
+                animate={{ rotate: [0, -10, 10, -10, 10, 0] }}
+                transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.3, repeatDelay: 3 }}
+              >{skill.emoji}</motion.span>
               <span className="text-base">{skill.name}</span>
-              <span
+              <motion.span
                 className="w-2.5 h-2.5 rounded-full ml-1"
+                animate={{ scale: [1, 1.5, 1], opacity: [1, 0.5, 1] }}
+                transition={{ duration: 1.8, repeat: Infinity, delay: i * 0.2 }}
                 style={{ background: skill.color }}
                 aria-hidden="true"
               />

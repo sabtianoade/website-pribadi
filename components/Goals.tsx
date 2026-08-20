@@ -106,13 +106,15 @@ export default function Goals() {
                   className="flex items-center gap-3 pb-4"
                   style={{ borderBottom: "2px solid var(--card-border)" }}
                 >
-                  <div
+                  <motion.div
                     className="w-10 h-10 rounded-xl flex items-center justify-center text-xl flex-shrink-0"
                     style={{ background: `${config.color}20` }}
+                    animate={{ scale: [1, 1.15, 1], rotate: [0, 5, -5, 0] }}
+                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: pi * 0.5 }}
                     aria-hidden="true"
                   >
                     {config.emoji}
-                  </div>
+                  </motion.div>
                   <div>
                     <div
                       className="text-xs font-bold uppercase tracking-widest"

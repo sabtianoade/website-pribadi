@@ -35,7 +35,7 @@ export default function Favorites() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-40px" }}
               transition={{ duration: 0.5, delay: i * 0.09 }}
-              whileHover={{ y: -5 }}
+              whileHover={{ y: -10, boxShadow: `0 20px 50px rgba(0,0,0,0.2)` }}
               className="group rounded-2xl overflow-hidden"
               style={{
                 background: "var(--card)",

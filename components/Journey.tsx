@@ -46,6 +46,7 @@ export default function Journey() {
                   whileInView={{ scale: 1 }}
                   viewport={{ once: true, amount: 0.2 }}
                   transition={{ duration: 0.4, delay: i * 0.1 + 0.2 }}
+                  animate={item.highlight ? { boxShadow: ["0 0 0px var(--primary)", "0 0 12px var(--primary)", "0 0 0px var(--primary)"] } : {}}
                   className="w-4 h-4 rounded-full mt-1.5 flex-shrink-0 z-10"
                   style={{
                     background: item.highlight ? "var(--primary)" : "var(--card-border)",
@@ -87,12 +88,13 @@ export default function Journey() {
 
                 {/* Card */}
                 <motion.div
-                  whileHover={{ x: 4 }}
+                  whileHover={{ x: 8, scale: 1.01 }}
                   transition={{ duration: 0.2 }}
                   className="p-4 rounded-xl"
                   style={{
                     background: "var(--card)",
                     border: `1px solid ${item.highlight ? "var(--primary)40" : "var(--card-border)"}`,
+                    boxShadow: item.highlight ? "0 4px 20px rgba(108,99,255,0.15)" : "none",
                   }}
                 >
                   <h3 className="font-bold text-base mb-1" style={{ color: "var(--foreground)" }}>
