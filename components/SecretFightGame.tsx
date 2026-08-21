@@ -318,8 +318,8 @@ export default function SecretFightGame({ isActive, onClose }: { isActive: boole
         p2.x += Math.sign(distX) * 4 * dt;
         p2.facing = Math.sign(distX);
       } else if (phaseRef.current === "fight") {
-        // In range attack
-        if (Math.random() < 0.05 * dt) {
+        // In range attack (Lowered frequency so player doesn't die instantly)
+        if (Math.random() < 0.015 * dt) {
           p2.state = 'bite';
           p2.facing = Math.sign(distX) || -1;
           setTimeout(() => { p2.state = 'idle'; }, 400);
@@ -327,7 +327,7 @@ export default function SecretFightGame({ isActive, onClose }: { isActive: boole
           // Check hit
           if (p1.state !== 'hurt' && Math.abs(p1.y - p2.y) < 60) {
             p1.state = 'hurt';
-            p1.hp -= 15;
+            p1.hp -= 8; // Lowered damage from 15 to 8
             p1.x -= p2.facing * 30; 
             p1.vy = -5; // knock up
             p1.mana = Math.min(MAX_MANA, p1.mana + 15); // get mana from taking dmg
@@ -352,14 +352,15 @@ export default function SecretFightGame({ isActive, onClose }: { isActive: boole
 
     // --- Projectile Logic ---
     if (proj.active) {
-      proj.x += proj.facing * 15 * dt;
+      proj.x += proj.facing * 20 * dt; // Faster projectile
+      proj.rotation = (proj.rotation || 0) + 20 * dt; // Spin projectile
       // Hit Dino
       if (proj.x > p2.x && proj.x < p2.x + 80 && Math.abs(proj.y - p2.y) < 60 && p2.state !== 'hurt') {
         proj.active = false;
         p2.state = 'hurt';
         p2.hp -= 30; // Huge damage
-        p2.x += proj.facing * 60;
-        p2.vy = -10;
+        p2.x += proj.facing * 80; // Bigger knockback
+        p2.vy = -15; // Higher knockup
         setTimeout(() => { p2.state = 'idle'; }, 500);
       }
       // Out of bounds
@@ -374,17 +375,36 @@ export default function SecretFightGame({ isActive, onClose }: { isActive: boole
 
     // --- Update DOM ---
     if (p1DivRef.current) {
-      p1DivRef.current.style.transform = `translate(${p1.x}px, ${p1.y}px) scaleX(${p1.facing})`;
-      if (p1.state === 'hurt') p1DivRef.current.style.filter = "brightness(2) contrast(1.5) blur(2px)";
-      else p1DivRef.current.style.filter = "none";
+      let extraX = 0;
+      let rotate = 0;
+      let filter = "none";
+      
+      if (p1.state === 'punch') {
+        extraX = 20 * p1.facing;
+        rotate = 15 * p1.facing;
+      } else if (p1.state === 'skill') {
+        filter = "drop-shadow(0 0 20px yellow) brightness(1.5)";
+      } else if (p1.state === 'hurt') {
+        filter = "brightness(2) contrast(1.5) blur(2px)";
+      }
+      
+      p1DivRef.current.style.transform = `translate(${p1.x + extraX}px, ${p1.y}px) scaleX(${p1.facing}) rotate(${rotate}deg)`;
+      p1DivRef.current.style.filter = filter;
     }
     if (p2DivRef.current) {
-      p2DivRef.current.style.transform = `translate(${p2.x}px, ${p2.y}px) scaleX(${p2.facing})`;
+      let extraX = 0;
+      let rotate = 0;
+      if (p2.state === 'bite') {
+        extraX = 20 * p2.facing;
+        rotate = -15 * p2.facing; // bite leans forward
+      }
+      
+      p2DivRef.current.style.transform = `translate(${p2.x + extraX}px, ${p2.y}px) scaleX(${p2.facing}) rotate(${rotate}deg)`;
       if (p2.state === 'hurt') p2DivRef.current.style.filter = "brightness(2) contrast(1.5) blur(2px)";
       else p2DivRef.current.style.filter = "none";
     }
     if (projDivRef.current) {
-      projDivRef.current.style.transform = `translate(${proj.x}px, ${proj.y}px) scaleX(${proj.facing})`;
+      projDivRef.current.style.transform = `translate(${proj.x}px, ${proj.y}px) scaleX(${proj.facing}) rotate(${proj.rotation || 0}deg)`;
       projDivRef.current.style.display = proj.active ? "block" : "none";
     }
 
@@ -428,29 +448,39 @@ export default function SecretFightGame({ isActive, onClose }: { isActive: boole
     
     p1.state = 'skill';
     p1.mana = 0;
+    p1.vy = -12; // Float up to charge
     
-    // Screen shake/flash
+    // Screen shake/flash charging
     if (screenFlashRef.current) {
-      screenFlashRef.current.style.background = "rgba(255, 255, 0, 0.3)";
+      screenFlashRef.current.style.background = "radial-gradient(circle at center, rgba(255,255,0,0.5), transparent)";
       screenFlashRef.current.style.opacity = "1";
-      setTimeout(() => {
-        if (screenFlashRef.current) {
-          screenFlashRef.current.style.opacity = "0";
-          screenFlashRef.current.style.background = "white"; // reset to fatality color
-        }
-      }, 200);
     }
 
+    // Fire after charging
     setTimeout(() => { 
       p1.state = 'idle'; 
+      // Powerful knockback on self
+      p1.vy = -5;
+      p1.x -= p1.facing * 30;
+      
+      if (screenFlashRef.current) {
+        screenFlashRef.current.style.background = "white"; // heavy flash on fire
+        setTimeout(() => {
+          if (screenFlashRef.current) {
+            screenFlashRef.current.style.opacity = "0";
+          }
+        }, 300);
+      }
+
       // Fire projectile
       projectileRef.current = {
         active: true,
         x: p1.x + p1.facing * 50,
-        y: p1.y + 30, // roughly chest height
-        facing: p1.facing
+        y: Math.min(p1.y, GROUND_Y - 50), // fires from up high if jumping
+        facing: p1.facing,
+        rotation: 0
       };
-    }, 200); // delay before firing
+    }, 600); // 600ms charge delay
   };
 
   const jump = () => {
