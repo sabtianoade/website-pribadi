@@ -152,16 +152,13 @@ export default function Hobbies() {
                   aria-hidden="true"
                 />
 
-                {/* Emoji icon */}
-                <motion.div
-                  whileHover={{ rotate: [0, -15, 15, -15, 15, 0], scale: 1.1 }}
-                  transition={{ duration: 0.6 }}
-                  className="relative z-10 text-4xl w-14 h-14 flex items-center justify-center rounded-2xl shadow-sm"
-                  style={{ background: `${hobby.color}15`, border: `1px solid ${hobby.color}30` }}
+                {/* White outline Lucide icon */}
+                <div
+                  className="relative z-10 w-10 h-10 flex items-center justify-center"
                   aria-hidden="true"
                 >
-                  {hobby.emoji}
-                </motion.div>
+                  <hobby.icon size={22} strokeWidth={1.5} color="rgba(255,255,255,0.7)" />
+                </div>
 
                 {/* Content */}
                 <div className="relative z-10 flex flex-col gap-2 flex-1 mt-2">

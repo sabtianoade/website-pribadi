@@ -77,35 +77,43 @@ export default function RandomFacts() {
                   scale: 1.04,
                   zIndex: 10,
                 }}
-                className="relative flex flex-col gap-4 p-5 rounded-2xl cursor-default"
+                className="relative flex flex-col gap-4 p-5 rounded-2xl cursor-default overflow-hidden"
                 style={{
                   background: "var(--card)",
-                  border: "1px solid var(--card-border)",
                   boxShadow: "0 4px 16px rgba(0,0,0,0.06)",
                   transformOrigin: "bottom center",
                   scale: style.scale,
                   position: "relative",
                 }}
               >
-                {/* Top accent — animated scanning strip */}
-                <div
-                  className="absolute top-0 left-6 right-6 h-px rounded-full overflow-hidden"
-                  style={{ background: "rgba(255,255,255,0.08)" }}
+                {/* SVG border draw — runs once around card, stays drawn */}
+                <motion.svg
+                  className="absolute inset-0 w-full h-full pointer-events-none"
+                  style={{ borderRadius: "1rem" }}
                   aria-hidden="true"
                 >
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      height: "100%",
-                      width: "40%",
-                      background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent)",
-                      animation: `scanLine ${2 + (i % 3) * 0.5}s linear infinite`,
-                      animationDelay: `${i * 0.3}s`,
+                  <motion.rect
+                    x="0.5"
+                    y="0.5"
+                    width="calc(100% - 1px)"
+                    height="calc(100% - 1px)"
+                    rx="15.5"
+                    ry="15.5"
+                    fill="none"
+                    stroke="rgba(255,255,255,0.25)"
+                    strokeWidth="1"
+                    initial={{ pathLength: 0, opacity: 0 }}
+                    whileInView={{
+                      pathLength: 1,
+                      opacity: 1,
+                    }}
+                    viewport={{ once: true, margin: "-40px" }}
+                    transition={{
+                      pathLength: { duration: 1.8, delay: i * 0.1, ease: "easeInOut" },
+                      opacity: { duration: 0.1, delay: i * 0.1 },
                     }}
                   />
-                </div>
+                </motion.svg>
 
                 {/* White outline icon */}
                 {(() => {

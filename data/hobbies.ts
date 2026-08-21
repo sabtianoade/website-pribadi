@@ -1,4 +1,4 @@
-import { Code2, Music, Activity, Target } from "lucide-react";
+import { Code2, Music, Activity, Target, Guitar, Coffee } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
 export interface Hobby {
@@ -49,7 +49,7 @@ export const hobbies: Hobby[] = [
     titleId: "Bermain Gitar",
     description: "Strumming some chords to relax.",
     descriptionId: "Main gitar sambil nyanyi buat ngelepas penat setelah seharian ngerjain tugas.",
-    icon: Music, // Just reusing Music icon, won't show anyway because we use emoji
+    icon: Guitar,
     color: "var(--muted)",
     emoji: "🎸",
   },
@@ -59,7 +59,7 @@ export const hobbies: Hobby[] = [
     titleId: "Bikin Kopi",
     description: "Brewing the perfect cup of coffee.",
     descriptionId: "Eksperimen bikin racikan kopi paling pas buat nemenin waktu ngoding atau nyantai.",
-    icon: Activity,
+    icon: Coffee,
     color: "var(--foreground)",
     emoji: "☕",
   },

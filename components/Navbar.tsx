@@ -19,6 +19,7 @@ const otherLinks = [
   { label: "Galeri", href: "/gallery" },
   { label: "Tujuan", href: "#goals" },
   { label: "Fakta", href: "#facts" },
+  { label: "🕹 Mini Game", href: "/game" },
 ];
 
 const allLinks = [...mainLinks, ...otherLinks];
