@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
+import { Headphones, Moon, UtensilsCrossed, Laptop, Bug, Coffee, Smartphone, Gamepad2 } from "lucide-react";
 import { facts } from "@/data/facts";
 
 // Scattered layout positions: rotate and scale vary per card
@@ -14,6 +15,17 @@ const cardStyles = [
   { rotate: "-1.5deg", scale: 1.0 },
   { rotate: "0.8deg", scale: 1.02 },
 ];
+
+const factIcons: Record<string, React.ElementType> = {
+  f1: Headphones,
+  f2: Moon,
+  f3: UtensilsCrossed,
+  f4: Laptop,
+  f5: Bug,
+  f6: Coffee,
+  f7: Smartphone,
+  f8: Gamepad2,
+};
 
 export default function RandomFacts() {
   return (
@@ -36,7 +48,7 @@ export default function RandomFacts() {
             <span className="gradient-text">Tentang Aku</span>
           </h2>
           <p style={{ color: "var(--muted)" }} className="text-base max-w-md">
-            Hal-hal yang mungkin nggak perlu kamu tahu, tapi sekarang kamu tahu. 😏
+            Hal-hal yang mungkin nggak perlu kamu tahu, tapi sekarang kamu tahu.
           </p>
         </motion.div>
 
@@ -68,31 +80,42 @@ export default function RandomFacts() {
                 className="relative flex flex-col gap-4 p-5 rounded-2xl cursor-default"
                 style={{
                   background: "var(--card)",
-                  border: `2px solid ${fact.color}25`,
-                  boxShadow: `0 4px 24px ${fact.color}10`,
+                  border: "1px solid var(--card-border)",
+                  boxShadow: "0 4px 16px rgba(0,0,0,0.06)",
                   transformOrigin: "bottom center",
                   scale: style.scale,
                   position: "relative",
                 }}
               >
-                {/* Top accent bar */}
+                {/* Top accent — animated scanning strip */}
                 <div
-                  className="absolute top-0 left-6 right-6 h-0.5 rounded-full"
-                  style={{ background: fact.color, opacity: 0.5 }}
-                  aria-hidden="true"
-                />
-
-                {/* Emoji */}
-                <motion.div
-                  className="text-3xl w-11 h-11 flex items-center justify-center rounded-xl"
-                  style={{ background: `${fact.color}15` }}
-                  animate={{ y: [0, -5, 0] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.2 }}
-                  whileHover={{ scale: 1.2, rotate: [0, -15, 15, -15, 15, 0] }}
+                  className="absolute top-0 left-6 right-6 h-px rounded-full overflow-hidden"
+                  style={{ background: "rgba(255,255,255,0.08)" }}
                   aria-hidden="true"
                 >
-                  {fact.emoji}
-                </motion.div>
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      height: "100%",
+                      width: "40%",
+                      background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent)",
+                      animation: `scanLine ${2 + (i % 3) * 0.5}s linear infinite`,
+                      animationDelay: `${i * 0.3}s`,
+                    }}
+                  />
+                </div>
+
+                {/* White outline icon */}
+                {(() => {
+                  const Icon = factIcons[fact.id];
+                  return Icon ? (
+                    <div className="w-9 h-9 flex items-center justify-center" aria-hidden="true">
+                      <Icon size={22} strokeWidth={1.5} color="rgba(255,255,255,0.7)" />
+                    </div>
+                  ) : null;
+                })()}
 
                 {/* Text */}
                 <p className="text-sm leading-relaxed" style={{ color: "var(--foreground)" }}>
