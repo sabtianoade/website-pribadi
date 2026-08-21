@@ -6,6 +6,7 @@ import { motion, AnimatePresence, useScroll, useSpring } from "motion/react";
 import { useRouter, usePathname } from "next/navigation";
 import { useTransition } from "./PageTransitionProvider";
 import ThemeToggle from "./ThemeToggle";
+import SecretFightGame from "./SecretFightGame";
 
 const mainLinks = [
   { label: "Beranda", href: "#home" },
@@ -28,6 +29,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
+  const [isSecretGameActive, setIsSecretGameActive] = useState(false);
 
   // Scroll Progress
   const { scrollYProgress } = useScroll();
@@ -104,14 +106,24 @@ export default function Navbar() {
           style={{ maxWidth: 1300, margin: "0 auto" }}
         >
           {/* Logo */}
-          <button
-            onClick={() => handleNavClick("#home")}
-            aria-label="Ke beranda"
-            className="text-xl font-black tracking-tight transition-opacity hover:opacity-70"
-            style={{ color: "var(--primary)" }}
-          >
-            thomas<span style={{ color: "var(--accent)" }}>.</span>
-          </button>
+          <div className="flex items-center">
+            <button
+              onClick={() => handleNavClick("#home")}
+              aria-label="Ke beranda"
+              className="text-xl font-black tracking-tight transition-opacity hover:opacity-70"
+              style={{ color: "var(--primary)" }}
+            >
+              thomas
+            </button>
+            <button
+              onClick={() => setIsSecretGameActive(true)}
+              aria-label="Secret Game Trigger"
+              className="text-xl font-black tracking-tight cursor-crosshair hover:scale-150 transition-transform origin-bottom"
+              style={{ color: "var(--accent)" }}
+            >
+              .
+            </button>
+          </div>
 
           {/* Right Section */}
           <div className="flex items-center gap-4 lg:gap-6">
@@ -234,6 +246,9 @@ export default function Navbar() {
           </>
         )}
       </AnimatePresence>
+      
+      {/* Easter Egg Game */}
+      <SecretFightGame isActive={isSecretGameActive} onClose={() => setIsSecretGameActive(false)} />
     </>
   );
 }

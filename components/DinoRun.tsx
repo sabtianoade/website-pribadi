@@ -120,7 +120,7 @@ export default function DinoRun() {
       dinoDivRef.current.style.transform = `translateY(${dinoRef.current.y}px)`;
     }
     if (obstacleDivRef.current) {
-      obstacleDivRef.current.style.transform = `translateX(${obstacleRef.current.x}px)`;
+      obstacleDivRef.current.style.transform = `translateX(${obstacleRef.current.x}px) translateY(${GROUND_Y}px)`;
     }
 
     // 5. Collision Detection
