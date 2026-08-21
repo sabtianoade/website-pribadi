@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useScroll, useTransform, useMotionValue, useSpring } from "motion/react";
+import { motion, useScroll, useTransform, useMotionValue, useSpring, useMotionTemplate } from "motion/react";
 import Image from "next/image";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
@@ -12,6 +12,7 @@ import TypewriterText from "@/components/TypewriterText";
 export default function Hero() {
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -30,6 +31,11 @@ export default function Hero() {
   const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [25, -25]), { damping: 30, stiffness: 200 });
   const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-25, 25]), { damping: 30, stiffness: 200 });
 
+  // Spotlight Effect
+  const spotlightX = useTransform(mouseX, [-0.5, 0.5], ["0%", "100%"]);
+  const spotlightY = useTransform(mouseY, [-0.5, 0.5], ["0%", "100%"]);
+  const spotlightBackground = useMotionTemplate`radial-gradient(circle 200px at ${spotlightX} ${spotlightY}, rgba(255,255,255,0.4), transparent 80%)`;
+
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const width = rect.width;
@@ -43,6 +49,7 @@ export default function Hero() {
   };
 
   const handleMouseLeave = () => {
+    setIsHovered(false);
     mouseX.set(0);
     mouseY.set(0);
   };
@@ -257,6 +264,7 @@ export default function Hero() {
           className="flex-shrink-0 w-full lg:w-auto flex justify-center perspective-[1000px]"
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
+          onMouseEnter={() => setIsHovered(true)}
         >
           <motion.div
             style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
@@ -283,9 +291,16 @@ export default function Hero() {
                   className="object-cover"
                   priority
                 />
+                
+                {/* Spotlight Overlay */}
+                <motion.div
+                  className="absolute inset-0 z-10 pointer-events-none mix-blend-overlay transition-opacity duration-300"
+                  style={{ background: spotlightBackground, opacity: isHovered ? 1 : 0 }}
+                />
+
                 {/* Overlay gradient */}
                 <div
-                  className="absolute inset-0"
+                  className="absolute inset-0 z-20 pointer-events-none"
                   style={{
                     background: "linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 60%)",
                   }}

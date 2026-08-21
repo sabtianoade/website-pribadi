@@ -35,13 +35,24 @@ export default function CustomCursor() {
 
   return (
     <motion.div
-      className="fixed top-0 left-0 w-8 h-8 rounded-full border-2 border-primary pointer-events-none z-[9999] hidden sm:flex items-center justify-center mix-blend-difference"
+      className="fixed top-0 left-0 w-8 h-8 pointer-events-none z-[9999] hidden sm:flex items-center justify-center mix-blend-difference"
       style={{
         x: cursorXSpring,
         y: cursorYSpring,
       }}
     >
-      <div className="w-1.5 h-1.5 bg-primary rounded-full" />
+      {/* Rotating outer square */}
+      <motion.div
+        animate={{ rotate: 360 }}
+        transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+        className="absolute inset-0 border-2 border-primary m-1"
+      />
+      {/* Inner square dot */}
+      <motion.div 
+        animate={{ rotate: -360 }}
+        transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+        className="w-2 h-2 bg-primary" 
+      />
     </motion.div>
   );
 }
