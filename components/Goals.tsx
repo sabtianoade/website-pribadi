@@ -106,15 +106,12 @@ export default function Goals() {
                   className="flex items-center gap-3 pb-4"
                   style={{ borderBottom: "2px solid var(--card-border)" }}
                 >
-                  <motion.div
-                    className="w-10 h-10 rounded-xl flex items-center justify-center text-xl flex-shrink-0"
-                    style={{ background: `${config.color}20` }}
-                    animate={{ scale: [1, 1.15, 1], rotate: [0, 5, -5, 0] }}
-                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: pi * 0.5 }}
+                  {/* Colored accent bar instead of emoji */}
+                  <div
+                    className="w-1 h-10 rounded-full flex-shrink-0"
+                    style={{ background: config.color }}
                     aria-hidden="true"
-                  >
-                    {config.emoji}
-                  </motion.div>
+                  />
                   <div>
                     <div
                       className="text-xs font-bold uppercase tracking-widest"
@@ -142,9 +139,12 @@ export default function Goals() {
                       transition={{ duration: 0.3, delay: pi * 0.1 + gi * 0.08 }}
                       className="flex gap-3"
                     >
-                      <span className="text-lg mt-0.5 flex-shrink-0" role="img" aria-label="">
-                        {goal.emoji}
-                      </span>
+                      {/* Small colored dot instead of emoji */}
+                      <div
+                        className="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0"
+                        style={{ background: config.color }}
+                        aria-hidden="true"
+                      />
                       <div>
                         <p className="text-sm font-semibold mb-0.5" style={{ color: "var(--foreground)" }}>
                           {goal.titleId}
