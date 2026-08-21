@@ -214,9 +214,9 @@ export default function Hero() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 1.1 }}
-            className="w-full max-w-sm mx-auto lg:mx-0 mt-6"
+            className="w-full max-w-2xl mx-auto lg:mx-0 mt-6"
           >
-            <div className="flex flex-col gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "var(--muted)" }}>Lagu Favoritku</p>
                 {mounted && (
@@ -238,7 +238,7 @@ export default function Hero() {
                     style={{ borderRadius: "12px", border: "none" }} 
                     src={`https://open.spotify.com/embed/playlist/7LwClcFdlAr7BUz5Mp1wBS?utm_source=generator${resolvedTheme === "dark" ? "&theme=0" : ""}`} 
                     width="100%" 
-                    height="352" 
+                    height="152" 
                     allowFullScreen={false} 
                     allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
                     loading="lazy"
