@@ -56,7 +56,7 @@ export default function Hobbies() {
                 className={`group relative p-6 rounded-[2rem] flex flex-col gap-4 overflow-hidden ${config.colSpan} ${config.minH}`}
                 style={{
                   background: "var(--card)",
-                  border: "1px solid var(--card-border)",
+                  border: "1px solid color-mix(in srgb, var(--foreground) 15%, transparent)",
                   transition: "transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease",
                   boxShadow: "0 10px 30px -10px rgba(0,0,0,0.1)",
                 }}
@@ -152,12 +152,13 @@ export default function Hobbies() {
                   aria-hidden="true"
                 />
 
-                {/* White outline Lucide icon */}
+                {/* Outline Lucide icon */}
                 <div
                   className="relative z-10 w-10 h-10 flex items-center justify-center"
                   aria-hidden="true"
+                  style={{ color: "var(--foreground)", opacity: 0.7 }}
                 >
-                  <hobby.icon size={22} strokeWidth={1.5} color="rgba(255,255,255,0.7)" />
+                  <hobby.icon size={22} strokeWidth={1.5} color="currentColor" />
                 </div>
 
                 {/* Content */}

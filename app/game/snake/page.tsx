@@ -189,8 +189,8 @@ export default function SnakePage() {
         </span>
       </div>
 
-      <div className="relative" style={{ border: "1px solid rgba(255,255,255,0.1)", borderRadius: 12, overflow: "hidden" }}>
-        <canvas ref={canvasRef} width={W} height={H} style={{ display: "block" }} />
+      <div className="relative w-full mx-auto" style={{ maxWidth: W, border: "1px solid rgba(255,255,255,0.1)", borderRadius: 12, overflow: "hidden", touchAction: "none" }}>
+        <canvas ref={canvasRef} width={W} height={H} style={{ display: "block", width: "100%", height: "auto" }} />
         {display.status === "dead" && (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-4" style={{ background: "rgba(0,0,0,0.75)", backdropFilter: "blur(4px)" }}>
             <p style={{ color: "white", fontFamily: "monospace", fontSize: 22, fontWeight: 700 }}>GAME OVER</p>
@@ -201,7 +201,54 @@ export default function SnakePage() {
           </div>
         )}
       </div>
-      <p style={{ color: "rgba(255,255,255,0.2)", fontSize: 11, fontFamily: "monospace", marginTop: 16 }}>WASD / ← ↑ → ↓ untuk gerak</p>
+
+      {/* Mobile Controls */}
+      <div className="mt-8 grid grid-cols-3 gap-2 w-full max-w-[180px] mx-auto md:hidden">
+        <div />
+        <button
+          onClick={() => {
+            const s = stateRef.current;
+            if (s.status === "idle") { s.status = "playing"; setDisplay(d => ({ ...d, status: "playing" })); }
+            if (s.dir !== "DOWN") s.nextDir = "UP";
+          }}
+          className="bg-white/10 active:bg-white/20 p-4 rounded-lg flex items-center justify-center text-white"
+        >
+          ↑
+        </button>
+        <div />
+        <button
+          onClick={() => {
+            const s = stateRef.current;
+            if (s.status === "idle") { s.status = "playing"; setDisplay(d => ({ ...d, status: "playing" })); }
+            if (s.dir !== "RIGHT") s.nextDir = "LEFT";
+          }}
+          className="bg-white/10 active:bg-white/20 p-4 rounded-lg flex items-center justify-center text-white"
+        >
+          ←
+        </button>
+        <button
+          onClick={() => {
+            const s = stateRef.current;
+            if (s.status === "idle") { s.status = "playing"; setDisplay(d => ({ ...d, status: "playing" })); }
+            if (s.dir !== "UP") s.nextDir = "DOWN";
+          }}
+          className="bg-white/10 active:bg-white/20 p-4 rounded-lg flex items-center justify-center text-white"
+        >
+          ↓
+        </button>
+        <button
+          onClick={() => {
+            const s = stateRef.current;
+            if (s.status === "idle") { s.status = "playing"; setDisplay(d => ({ ...d, status: "playing" })); }
+            if (s.dir !== "LEFT") s.nextDir = "RIGHT";
+          }}
+          className="bg-white/10 active:bg-white/20 p-4 rounded-lg flex items-center justify-center text-white"
+        >
+          →
+        </button>
+      </div>
+
+      <p className="hidden md:block" style={{ color: "rgba(255,255,255,0.2)", fontSize: 11, fontFamily: "monospace", marginTop: 16 }}>WASD / ← ↑ → ↓ untuk gerak</p>
     </main>
   );
 }

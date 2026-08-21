@@ -170,8 +170,8 @@ export default function FlappyPage() {
           SCORE: <span style={{ color: "white", fontSize: 20, fontWeight: 700 }}>{display.score}</span>
         </div>
       </div>
-      <div className="relative" style={{ border: "1px solid rgba(255,255,255,0.1)", borderRadius: 16, overflow: "hidden" }} onClick={jump}>
-        <canvas ref={canvasRef} width={420} height={520} style={{ display: "block", cursor: "pointer" }} />
+      <div className="relative w-full max-w-[420px] mx-auto" style={{ border: "1px solid rgba(255,255,255,0.1)", borderRadius: 16, overflow: "hidden", touchAction: "none" }} onClick={jump}>
+        <canvas ref={canvasRef} width={420} height={520} style={{ display: "block", cursor: "pointer", width: "100%", height: "auto" }} />
         {display.status === "dead" && (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-4" style={{ background: "rgba(0,0,0,0.7)", backdropFilter: "blur(4px)" }}>
             <p style={{ color: "white", fontFamily: "monospace", fontSize: 22, fontWeight: 700 }}>GAME OVER</p>

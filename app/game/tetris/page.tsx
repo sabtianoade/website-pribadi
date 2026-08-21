@@ -186,8 +186,8 @@ export default function TetrisPage() {
         <div style={{ color: "rgba(255,255,255,0.5)", fontSize: 13 }}>SCORE: <span style={{ color: "white", fontWeight: 700 }}>{display.score}</span></div>
         <div style={{ color: "rgba(255,255,255,0.5)", fontSize: 13 }}>LINES: <span style={{ color: "white", fontWeight: 700 }}>{display.lines}</span></div>
       </div>
-      <div className="relative" style={{ border: "1px solid rgba(255,255,255,0.1)", borderRadius: 12, overflow: "hidden" }}>
-        <canvas ref={canvasRef} width={W} height={H} style={{ display: "block" }} />
+      <div className="relative w-full mx-auto" style={{ maxWidth: W, border: "1px solid rgba(255,255,255,0.1)", borderRadius: 12, overflow: "hidden", touchAction: "none" }}>
+        <canvas ref={canvasRef} width={W} height={H} style={{ display: "block", width: "100%", height: "auto" }} />
         {display.status === "dead" && (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-4" style={{ background: "rgba(0,0,0,0.8)", backdropFilter: "blur(4px)" }}>
             <p style={{ color: "white", fontFamily: "monospace", fontSize: 22, fontWeight: 700 }}>GAME OVER</p>
@@ -198,7 +198,76 @@ export default function TetrisPage() {
           </div>
         )}
       </div>
-      <p style={{ color: "rgba(255,255,255,0.2)", fontSize: 11, fontFamily: "monospace", marginTop: 16 }}>← → gerak · ↑ putar · ↓ turun · SPASI drop</p>
+
+      {/* Mobile Controls */}
+      <div className="mt-6 flex flex-col gap-4 w-full max-w-[280px] mx-auto md:hidden">
+        <div className="grid grid-cols-3 gap-2">
+          <div />
+          <button
+            onClick={() => {
+              const s = stateRef.current;
+              if (s.status === "idle") { s.status = "playing"; setDisplay(d => ({ ...d, status: "playing" })); }
+              if (s.status !== "playing") return;
+              const rotated = { ...s.piece, shape: rotate(s.piece.shape) };
+              if (fits(s.board, rotated)) s.piece = rotated;
+              draw();
+            }}
+            className="bg-white/10 active:bg-white/20 p-4 rounded-lg flex items-center justify-center text-white"
+          >
+            ↻
+          </button>
+          <div />
+          <button
+            onClick={() => {
+              const s = stateRef.current;
+              if (s.status === "idle") { s.status = "playing"; setDisplay(d => ({ ...d, status: "playing" })); }
+              if (s.status !== "playing") return;
+              if (fits(s.board, s.piece, -1)) s.piece = { ...s.piece, x: s.piece.x - 1 };
+              draw();
+            }}
+            className="bg-white/10 active:bg-white/20 p-4 rounded-lg flex items-center justify-center text-white"
+          >
+            ←
+          </button>
+          <button
+            onClick={() => {
+              const s = stateRef.current;
+              if (s.status === "idle") { s.status = "playing"; setDisplay(d => ({ ...d, status: "playing" })); }
+              if (s.status !== "playing") return;
+              dropPiece();
+            }}
+            className="bg-white/10 active:bg-white/20 p-4 rounded-lg flex items-center justify-center text-white"
+          >
+            ↓
+          </button>
+          <button
+            onClick={() => {
+              const s = stateRef.current;
+              if (s.status === "idle") { s.status = "playing"; setDisplay(d => ({ ...d, status: "playing" })); }
+              if (s.status !== "playing") return;
+              if (fits(s.board, s.piece, 1)) s.piece = { ...s.piece, x: s.piece.x + 1 };
+              draw();
+            }}
+            className="bg-white/10 active:bg-white/20 p-4 rounded-lg flex items-center justify-center text-white"
+          >
+            →
+          </button>
+        </div>
+        <button
+          onClick={() => {
+            const s = stateRef.current;
+            if (s.status === "idle") { s.status = "playing"; setDisplay(d => ({ ...d, status: "playing" })); }
+            if (s.status !== "playing") return;
+            while (fits(s.board, s.piece, 0, 1)) s.piece = { ...s.piece, y: s.piece.y + 1 };
+            dropPiece();
+          }}
+          className="bg-white/10 active:bg-white/20 py-3 rounded-lg flex items-center justify-center text-white w-full tracking-widest text-sm"
+        >
+          DROP
+        </button>
+      </div>
+
+      <p className="hidden md:block" style={{ color: "rgba(255,255,255,0.2)", fontSize: 11, fontFamily: "monospace", marginTop: 16 }}>← → gerak · ↑ putar · ↓ turun · SPASI drop</p>
     </main>
   );
 }

@@ -81,6 +81,7 @@ export default function RandomFacts() {
                 style={{
                   background: "var(--card)",
                   boxShadow: "0 4px 16px rgba(0,0,0,0.06)",
+                  border: "1px solid color-mix(in srgb, var(--foreground) 15%, transparent)",
                   transformOrigin: "bottom center",
                   scale: style.scale,
                   position: "relative",
@@ -100,8 +101,8 @@ export default function RandomFacts() {
                     rx="15.5"
                     ry="15.5"
                     fill="none"
-                    stroke="rgba(255,255,255,0.25)"
-                    strokeWidth="1"
+                    style={{ stroke: "var(--foreground)", strokeOpacity: 0.5 }}
+                    strokeWidth="1.5"
                     initial={{ pathLength: 0, opacity: 0 }}
                     whileInView={{
                       pathLength: 1,
@@ -119,8 +120,8 @@ export default function RandomFacts() {
                 {(() => {
                   const Icon = factIcons[fact.id];
                   return Icon ? (
-                    <div className="w-9 h-9 flex items-center justify-center" aria-hidden="true">
-                      <Icon size={22} strokeWidth={1.5} color="rgba(255,255,255,0.7)" />
+                    <div className="w-9 h-9 flex items-center justify-center" aria-hidden="true" style={{ color: "var(--foreground)", opacity: 0.7 }}>
+                      <Icon size={22} strokeWidth={1.5} color="currentColor" />
                     </div>
                   ) : null;
                 })()}

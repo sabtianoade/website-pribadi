@@ -141,19 +141,19 @@ export default function PongPage() {
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center px-4 py-10" style={{ background: "#050505" }}>
-      <div className="mb-6 flex items-center justify-between" style={{ width: W }}>
+      <div className="mb-6 flex items-center justify-between w-full mx-auto" style={{ maxWidth: W }}>
         <Link href="/game" className="flex items-center gap-2 text-sm hover:opacity-80 transition-opacity" style={{ color: "rgba(255,255,255,0.5)", fontFamily: "monospace" }}>
           <ArrowLeft size={16} /> pilih game
         </Link>
         <span style={{ color: "rgba(255,255,255,0.2)", fontSize: 12, fontFamily: "monospace" }}>PONG.EXE</span>
       </div>
-      <div className="mb-3 flex gap-8" style={{ fontFamily: "monospace" }}>
+      <div className="mb-3 flex gap-8 w-full mx-auto" style={{ maxWidth: W, fontFamily: "monospace" }}>
         <span style={{ color: "rgba(255,255,255,0.5)", fontSize: 13 }}>KAMU: <span style={{ color: "white", fontWeight: 700 }}>{display.scorePlayer}</span></span>
         <span style={{ color: "rgba(255,255,255,0.2)", fontSize: 13 }}>vs</span>
         <span style={{ color: "rgba(255,255,255,0.5)", fontSize: 13 }}>AI: <span style={{ color: "white", fontWeight: 700 }}>{display.scoreAi}</span></span>
       </div>
-      <div className="relative" style={{ border: "1px solid rgba(255,255,255,0.1)", borderRadius: 12, overflow: "hidden" }}>
-        <canvas ref={canvasRef} width={W} height={H} style={{ display: "block" }} />
+      <div className="relative w-full mx-auto" style={{ maxWidth: W, border: "1px solid rgba(255,255,255,0.1)", borderRadius: 12, overflow: "hidden", touchAction: "none" }}>
+        <canvas ref={canvasRef} width={W} height={H} style={{ display: "block", width: "100%", height: "auto" }} />
         {display.status === "dead" && (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-4" style={{ background: "rgba(0,0,0,0.8)", backdropFilter: "blur(4px)" }}>
             <p style={{ color: "white", fontFamily: "monospace", fontSize: 22, fontWeight: 700 }}>
@@ -166,7 +166,36 @@ export default function PongPage() {
           </div>
         )}
       </div>
-      <p style={{ color: "rgba(255,255,255,0.2)", fontSize: 11, fontFamily: "monospace", marginTop: 16 }}>W/↑ naik · S/↓ turun · Menang pertama ke 5 poin</p>
+
+      {/* Mobile Controls */}
+      <div className="mt-8 flex gap-4 w-full max-w-[200px] mx-auto md:hidden">
+        <button
+          onPointerDown={() => {
+            const s = stateRef.current;
+            if (s.status === "idle") { s.status = "playing"; setDisplay(d => ({ ...d, status: "playing" })); }
+            s.keys.up = true;
+          }}
+          onPointerUp={() => stateRef.current.keys.up = false}
+          onPointerLeave={() => stateRef.current.keys.up = false}
+          className="bg-white/10 active:bg-white/20 p-6 rounded-lg flex-1 flex items-center justify-center text-white select-none"
+        >
+          ↑
+        </button>
+        <button
+          onPointerDown={() => {
+            const s = stateRef.current;
+            if (s.status === "idle") { s.status = "playing"; setDisplay(d => ({ ...d, status: "playing" })); }
+            s.keys.down = true;
+          }}
+          onPointerUp={() => stateRef.current.keys.down = false}
+          onPointerLeave={() => stateRef.current.keys.down = false}
+          className="bg-white/10 active:bg-white/20 p-6 rounded-lg flex-1 flex items-center justify-center text-white select-none"
+        >
+          ↓
+        </button>
+      </div>
+
+      <p className="hidden md:block" style={{ color: "rgba(255,255,255,0.2)", fontSize: 11, fontFamily: "monospace", marginTop: 16 }}>W/↑ naik · S/↓ turun · Menang pertama ke 5 poin</p>
     </main>
   );
 }

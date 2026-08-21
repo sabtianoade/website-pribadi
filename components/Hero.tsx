@@ -2,12 +2,21 @@
 
 import { motion, useScroll, useTransform, useMotionValue, useSpring } from "motion/react";
 import Image from "next/image";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 import { Instagram, MapPin, GraduationCap } from "lucide-react";
 import { WhatsAppIcon, TikTokIcon } from "@/components/Icons";
 import MagneticButton from "@/components/MagneticButton";
 import TypewriterText from "@/components/TypewriterText";
 
 export default function Hero() {
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const handleScroll = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
@@ -208,15 +217,17 @@ export default function Hero() {
             className="w-full max-w-sm mx-auto lg:mx-0 mt-6"
           >
             <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "var(--muted)" }}>Lagu Favoritku Sekarang</p>
-            <iframe 
-              style={{ borderRadius: "12px", border: "none" }} 
-              src="https://open.spotify.com/embed/track/3CBxVM0zGj41BQtE6m7gwb?utm_source=generator&theme=0" 
-              width="100%" 
-              height="152" 
-              allowFullScreen={false} 
-              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
-              loading="lazy"
-            ></iframe>
+            {mounted && (
+              <iframe 
+                style={{ borderRadius: "12px", border: "none" }} 
+                src={`https://open.spotify.com/embed/track/3CBxVM0zGj41BQtE6m7gwb?utm_source=generator${resolvedTheme === "dark" ? "&theme=0" : ""}`} 
+                width="100%" 
+                height="152" 
+                allowFullScreen={false} 
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                loading="lazy"
+              ></iframe>
+            )}
           </motion.div>
         </div>
 
