@@ -52,6 +52,33 @@ const games = [
     desc: "Ping pong lawan AI. Pertama ke 5 poin menang.",
     char: "◉",
   },
+  {
+    id: "whack",
+    href: "/game/whack",
+    title: "Whack-A-Gorilla",
+    tag: "ACTION",
+    controls: "Klik / Tap",
+    desc: "Gorila muncul dari lubang secara acak. Pukul secepatnya!",
+    char: "🦍",
+  },
+  {
+    id: "dino",
+    href: "/game/dino",
+    title: "Dino Run",
+    tag: "ARCADE",
+    controls: "Spasi / Tap",
+    desc: "Lompati gorila yang datang dari kanan. Bertahan selama mungkin!",
+    char: "🦖",
+  },
+  {
+    id: "space",
+    href: "/game/space",
+    title: "Space Shooter",
+    tag: "SHOOTER",
+    controls: "Mouse / Drag",
+    desc: "Tembak jatuh pesawat musuh dan kumpulkan bintang untuk poin.",
+    char: "🚀",
+  },
 ];
 
 // Loading screen overlay
