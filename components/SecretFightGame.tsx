@@ -217,7 +217,13 @@ export default function SecretFightGame({ isActive, onClose }: { isActive: boole
   // Game State Refs
   const p1Ref = useRef({ x: 50, y: GROUND_Y, vy: 0, hp: 100, mana: 0, state: 'idle' as 'idle'|'punch'|'skill'|'hurt', facing: 1 });
   const p2Ref = useRef({ x: 300, y: GROUND_Y, vy: 0, hp: 100, state: 'idle' as 'idle'|'bite'|'hurt', facing: -1 });
-  const projectileRef = useRef({ active: false, x: 0, y: 0, facing: 1 });
+  const projectileRef = useRef<{ active: boolean; x: number; y: number; facing: number; rotation?: number }>({
+    active: false,
+    x: 0,
+    y: 0,
+    facing: 1,
+    rotation: 0
+  });
   
   const keysRef = useRef({ left: false, right: false, up: false, punch: false, skill: false });
   const frameRef = useRef(0);
