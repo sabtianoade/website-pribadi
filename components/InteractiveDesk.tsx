@@ -81,14 +81,14 @@ export default function InteractiveDesk() {
   if (!mounted) return null;
 
   return (
-    <section className="relative w-full py-20 bg-[#f5f5dc] dark:bg-[#2c2621] overflow-hidden border-y-8 border-[#8B4513]/20">
-      <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ backgroundImage: "url('https://www.transparenttextures.com/patterns/wood-pattern.png')" }} />
+    <section className="relative w-full py-20 bg-gray-200 dark:bg-zinc-900 overflow-hidden border-y-8 border-black/10 dark:border-white/5">
+      <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: "url('https://www.transparenttextures.com/patterns/wood-pattern.png')" }} />
       
       <div className="relative max-w-7xl mx-auto px-6 mb-8 text-center z-10">
-        <h2 className="text-3xl md:text-5xl font-black mb-4 text-[#8B4513] dark:text-[#D2B48C]">
+        <h2 className="text-3xl md:text-5xl font-black mb-4 text-gray-800 dark:text-gray-200">
           MEJA KERJA <span className="text-[var(--primary)]">BERANTAKAN</span>
         </h2>
-        <p className="text-[#5c4033] dark:text-[#a08b7d] max-w-2xl mx-auto font-medium">
+        <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto font-medium">
           Selamat datang di meja kerjaku! Silakan geser-geser (drag & drop) barang-barang ini. Klik dua kali pada foto polaroid untuk melihatnya lebih jelas.
         </p>
       </div>

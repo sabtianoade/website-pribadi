@@ -171,7 +171,7 @@ export default function ConfettiButton() {
       <button
         id="fruit-throw-btn"
         onClick={throwFruits}
-        className="fixed bottom-4 right-4 z-50 w-12 h-12 rounded-full flex items-center justify-center text-xl hover:scale-110 active:scale-90 transition-transform"
+        className="fixed bottom-6 left-6 z-50 w-12 h-12 rounded-full flex items-center justify-center text-xl hover:scale-110 active:scale-90 transition-transform"
         style={{
           background: "transparent",
           border: "2px solid white",
