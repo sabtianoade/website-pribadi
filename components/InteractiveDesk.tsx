@@ -13,16 +13,60 @@ type DeskItem = {
   initialX: number;
   initialY: number;
   rotation: number;
-  type: "photo" | "object";
+  type: "photo" | "object" | "svg";
+  svgContent?: React.ReactNode;
 };
 
 const ITEMS: DeskItem[] = [
-  { id: "1", src: "/momen-lagi.png", alt: "Momen 1", width: 250, height: 250, initialX: 50, initialY: 50, rotation: -5, type: "photo" },
-  { id: "2", src: "/badmin.png", alt: "Badminton", width: 200, height: 250, initialX: 350, initialY: 20, rotation: 8, type: "photo" },
-  { id: "3", src: "/gitar.png", alt: "Gitar", width: 180, height: 300, initialX: 600, initialY: 40, rotation: -15, type: "object" },
-  { id: "4", src: "/bikinkopi.png", alt: "Kopi", width: 200, height: 200, initialX: 100, initialY: 300, rotation: 3, type: "object" },
-  { id: "5", src: "/padel.png", alt: "Padel", width: 250, height: 200, initialX: 400, initialY: 320, rotation: -6, type: "photo" },
-  { id: "6", src: "/makanan-fav.png", alt: "Makanan Fav", width: 220, height: 220, initialX: 750, initialY: 250, rotation: 12, type: "photo" }
+  { id: "1", src: "/meja-makanan.jpeg", alt: "Makanan Favorit", width: 250, height: 250, initialX: 50, initialY: 50, rotation: -5, type: "photo" },
+  { id: "2", src: "/meja-random.jpeg", alt: "Foto Random", width: 200, height: 250, initialX: 450, initialY: 30, rotation: 8, type: "photo" },
+  { id: "3", src: "/meja-badminton.jpeg", alt: "Badminton", width: 250, height: 200, initialX: 650, initialY: 320, rotation: -15, type: "photo" },
+  { id: "4", src: "/meja-gitar.jpeg", alt: "Gitar", width: 220, height: 250, initialX: 100, initialY: 300, rotation: 3, type: "photo" },
+  { 
+    id: "5", src: "", alt: "Kertas Dokumen", width: 200, height: 260, initialX: 250, initialY: 150, rotation: -4, type: "svg",
+    svgContent: (
+      <svg viewBox="0 0 200 260" className="w-full h-full drop-shadow-md">
+        <rect x="0" y="0" width="200" height="260" fill="#fdfbf7" />
+        <rect x="20" y="40" width="160" height="4" fill="#ddd" />
+        <rect x="20" y="60" width="160" height="4" fill="#ddd" />
+        <rect x="20" y="80" width="160" height="4" fill="#ddd" />
+        <rect x="20" y="100" width="100" height="4" fill="#ddd" />
+        {/* Paper clip */}
+        <path d="M 30 10 L 30 30 C 30 35 35 35 35 30 L 35 5 C 35 0 25 0 25 5 L 25 35 C 25 45 40 45 40 35 L 40 10" fill="none" stroke="#silver" strokeWidth="4" />
+      </svg>
+    )
+  },
+  {
+    id: "6", src: "", alt: "Tempat Pensil", width: 100, height: 140, initialX: 550, initialY: 120, rotation: 12, type: "svg",
+    svgContent: (
+      <svg viewBox="0 0 100 140" className="w-full h-full drop-shadow-xl">
+        {/* Pencils sticking out */}
+        <polygon points="30,80 40,30 50,80" fill="#fcd34d" />
+        <polygon points="40,30 45,20 50,30" fill="#f87171" />
+        <polygon points="60,80 70,20 80,80" fill="#60a5fa" />
+        <polygon points="70,20 75,10 80,20" fill="#3b82f6" />
+        {/* Cup */}
+        <path d="M 20 60 L 80 60 L 70 140 L 30 140 Z" fill="#9ca3af" />
+        <path d="M 20 60 L 80 60 L 75 70 L 25 70 Z" fill="#4b5563" />
+      </svg>
+    )
+  },
+  {
+    id: "7", src: "", alt: "Kopi", width: 120, height: 120, initialX: 800, initialY: 100, rotation: 0, type: "svg",
+    svgContent: (
+      <svg viewBox="0 0 120 120" className="w-full h-full drop-shadow-lg">
+        {/* Saucer */}
+        <ellipse cx="60" cy="90" rx="50" ry="15" fill="#e5e7eb" />
+        <ellipse cx="60" cy="90" rx="35" ry="10" fill="#d1d5db" />
+        {/* Cup */}
+        <path d="M 30 40 L 90 40 C 90 80 80 90 60 90 C 40 90 30 80 30 40 Z" fill="#ffffff" />
+        {/* Coffee */}
+        <ellipse cx="60" cy="40" rx="28" ry="8" fill="#4a3f35" />
+        {/* Handle */}
+        <path d="M 85 50 C 110 50 110 70 85 70" fill="none" stroke="#ffffff" strokeWidth="10" />
+      </svg>
+    )
+  }
 ];
 
 export default function InteractiveDesk() {
@@ -92,12 +136,16 @@ export default function InteractiveDesk() {
               style={{ width: item.width, height: item.type === "photo" ? item.height + 40 : item.height }}
             >
               <div className="relative w-full h-full pointer-events-none">
-                <Image 
-                  src={item.src} 
-                  alt={item.alt} 
-                  fill 
-                  className="object-cover pointer-events-none rounded-sm"
-                />
+                {item.type === "svg" ? (
+                  item.svgContent
+                ) : (
+                  <Image 
+                    src={item.src} 
+                    alt={item.alt} 
+                    fill 
+                    className="object-cover pointer-events-none rounded-sm"
+                  />
+                )}
               </div>
               {item.type === "photo" && (
                 <div className="absolute bottom-3 left-0 w-full text-center font-mono text-gray-600 text-sm pointer-events-none">
