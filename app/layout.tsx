@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import PageTransitionProvider from "@/components/PageTransitionProvider";
 import InitialLoader from "@/components/InitialLoader";
+import ThomasAI from "@/components/ThomasAI";
 import "./globals.css";
 
 const inter = Inter({
@@ -41,6 +42,7 @@ export default function RootLayout({
           <InitialLoader />
           <PageTransitionProvider>
             {children}
+            <ThomasAI />
           </PageTransitionProvider>
         </ThemeProvider>
       </body>

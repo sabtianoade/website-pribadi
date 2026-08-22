@@ -13,6 +13,11 @@ export default function Hero() {
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [accessories, setAccessories] = useState<string[]>([]);
+
+  const toggleAccessory = (acc: string) => {
+    setAccessories(prev => prev.includes(acc) ? prev.filter(a => a !== acc) : [...prev, acc]);
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -313,6 +318,61 @@ export default function Hero() {
                 >
                   <p className="text-white font-black text-3xl mb-1 tracking-tight">Thomas</p>
                 </motion.div>
+
+                {/* --- ACCESSORIES OVERLAY --- */}
+                <AnimatePresence>
+                  {accessories.includes("glasses") && (
+                    <motion.div 
+                      initial={{ y: -50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -50, opacity: 0 }}
+                      className="absolute top-[28%] left-[25%] w-[50%] h-[20%] pointer-events-none z-30 flex items-center justify-center"
+                    >
+                      {/* Pixel Sunglasses */}
+                      <svg viewBox="0 0 100 30" fill="black" className="w-full drop-shadow-md">
+                        <rect x="0" y="5" width="25" height="10" />
+                        <rect x="25" y="5" width="10" height="5" />
+                        <rect x="35" y="5" width="25" height="10" />
+                        <rect x="60" y="5" width="10" height="5" />
+                        <rect x="70" y="5" width="25" height="10" />
+                        {/* Lenses */}
+                        <rect x="5" y="15" width="15" height="10" />
+                        <rect x="40" y="15" width="15" height="10" />
+                        <rect x="75" y="15" width="15" height="10" />
+                        {/* Glare */}
+                        <rect x="5" y="15" width="5" height="5" fill="white" opacity="0.8" />
+                        <rect x="40" y="15" width="5" height="5" fill="white" opacity="0.8" />
+                        <rect x="75" y="15" width="5" height="5" fill="white" opacity="0.8" />
+                      </svg>
+                    </motion.div>
+                  )}
+                  {accessories.includes("hat") && (
+                    <motion.div 
+                      initial={{ y: -50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -50, opacity: 0 }}
+                      className="absolute top-[-5%] left-[20%] w-[60%] h-[30%] pointer-events-none z-30 flex items-end justify-center"
+                    >
+                      {/* Crown */}
+                      <svg viewBox="0 0 100 50" fill="#FFD700" className="w-[80%] drop-shadow-lg">
+                        <path d="M0 50 L100 50 L100 10 L80 30 L50 0 L20 30 L0 10 Z" />
+                        <circle cx="0" cy="10" r="5" fill="#FFA500" />
+                        <circle cx="50" cy="0" r="5" fill="#FFA500" />
+                        <circle cx="100" cy="10" r="5" fill="#FFA500" />
+                        <circle cx="50" cy="35" r="5" fill="red" />
+                        <circle cx="25" cy="35" r="4" fill="blue" />
+                        <circle cx="75" cy="35" r="4" fill="blue" />
+                      </svg>
+                    </motion.div>
+                  )}
+                  {accessories.includes("mustache") && (
+                    <motion.div 
+                      initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0, opacity: 0 }}
+                      className="absolute top-[48%] left-[35%] w-[30%] h-[10%] pointer-events-none z-30 flex items-center justify-center"
+                    >
+                      {/* Mustache */}
+                      <svg viewBox="0 0 100 30" fill="#333" className="w-full drop-shadow-md">
+                        <path d="M0 15 Q25 -10 50 15 Q75 -10 100 15 Q75 30 50 20 Q25 30 0 15 Z" />
+                      </svg>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
 
               {/* Info bar at bottom */}
@@ -362,11 +422,38 @@ export default function Hero() {
 
               {/* Quick info tags below card */}
               <div
-                className="px-5 pb-5 pt-0 flex flex-col gap-2.5 bg-[var(--card)]"
+                className="px-5 pb-4 pt-0 flex flex-col gap-2.5 bg-[var(--card)]"
               >
-                <div className="flex items-center gap-2.5 text-xs font-medium" style={{ color: "var(--muted)" }}>
-                  <MapPin size={14} className="text-[var(--primary)]" aria-hidden="true" />
-                  <span>Pasuruan, Indonesia</span>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2.5 text-xs font-medium" style={{ color: "var(--muted)" }}>
+                    <MapPin size={14} className="text-[var(--primary)]" aria-hidden="true" />
+                    <span>Pasuruan, Indonesia</span>
+                  </div>
+                  
+                  {/* Dress-Up Controls */}
+                  <div className="flex gap-2">
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); toggleAccessory("glasses"); }}
+                      className={`w-7 h-7 rounded-full flex items-center justify-center border transition-colors ${accessories.includes("glasses") ? "bg-[var(--primary)] border-[var(--primary)]" : "border-[var(--card-border)] hover:bg-black/5 dark:hover:bg-white/5"}`}
+                      title="Kacamata"
+                    >
+                      🕶️
+                    </button>
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); toggleAccessory("hat"); }}
+                      className={`w-7 h-7 rounded-full flex items-center justify-center border transition-colors ${accessories.includes("hat") ? "bg-[var(--primary)] border-[var(--primary)]" : "border-[var(--card-border)] hover:bg-black/5 dark:hover:bg-white/5"}`}
+                      title="Mahkota"
+                    >
+                      👑
+                    </button>
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); toggleAccessory("mustache"); }}
+                      className={`w-7 h-7 rounded-full flex items-center justify-center border transition-colors ${accessories.includes("mustache") ? "bg-[var(--primary)] border-[var(--primary)]" : "border-[var(--card-border)] hover:bg-black/5 dark:hover:bg-white/5"}`}
+                      title="Kumis"
+                    >
+                      🥸
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>

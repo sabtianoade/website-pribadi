@@ -10,7 +10,8 @@ import DinoDecoration from "@/components/DinoDecoration";
 import ConfettiButton from "@/components/ConfettiButton";
 import CustomCursor from "@/components/CustomCursor";
 import ParticlesBackground from "@/components/ParticlesBackground";
-import GamesZone from "@/components/GamesZone";
+import InteractiveDesk from "@/components/InteractiveDesk";
+
 export default function Home() {
   return (
     <>
@@ -26,7 +27,7 @@ export default function Home() {
         <Skills />
         <Goals />
         <RandomFacts />
-        <GamesZone />
+        <InteractiveDesk />
       </main>
       <Footer />
     </>
