@@ -22,7 +22,7 @@ const QNA = [
   },
   {
     q: "Minuman favorit?",
-    a: "Nggak minum kopi. Energiku dari es teh, lo-fi beats, dan tekad bulat. ☕❌ 🧊✅"
+    a: "Suka banget sama kopi! Energiku dari secangkir kopi, lo-fi beats, dan tekad bulat. ☕✅"
   },
   {
     q: "Kapan paling produktif?",
@@ -30,7 +30,7 @@ const QNA = [
   },
   {
     q: "Bikin web ini pakai apa?",
-    a: "Website ini dibuat dengan penuh keringat menggunakan Next.js, Tailwind CSS, Framer Motion, dan banyak sekali kopi... eh maksudku es teh. 💻"
+    a: "Website ini dibuat dengan penuh keringat menggunakan Next.js, Tailwind CSS, Framer Motion, dan tentu saja... banyak sekali kopi. 💻"
   }
 ];
 

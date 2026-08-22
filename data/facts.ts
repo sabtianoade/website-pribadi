@@ -46,7 +46,7 @@ export const facts: Fact[] = [
     id: "f6",
     emoji: "☕",
     text: "I don't drink coffee. I run on cold drinks.",
-    textId: "Nggak minum kopi. Energiku dari es teh, lo-fi beats, dan tekad bulat.",
+    textId: "Suka banget sama kopi! Energiku dari secangkir kopi, lo-fi beats, dan tekad bulat.",
     color: "#F9C74F",
   },
   {
