@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import { useEffect, useState } from "react";
+import { Heart, Star, Sparkles } from "lucide-react";
 
 const NUM_PARTICLES = 30;
 
@@ -15,7 +16,7 @@ export default function FallingParticles() {
       left: Math.random() * 100,
       duration: Math.random() * 15 + 15, // fall duration between 15s and 30s
       delay: Math.random() * 15,
-      size: Math.random() * 10 + 10, // size between 10px and 20px
+      size: Math.random() * 12 + 12, // size between 12px and 24px for SVG
       rotate: Math.random() * 360,
     }));
     setParticles(generated);
@@ -32,7 +33,7 @@ export default function FallingParticles() {
           animate={{
             y: ["0vh", "120vh"],
             x: [0, Math.random() * 100 - 50, Math.random() * 100 - 50],
-            opacity: [0, 0.7, 0.7, 0],
+            opacity: [0, 0.5, 0.5, 0],
             rotate: [p.rotate, p.rotate + 180, p.rotate + 360]
           }}
           transition={{
@@ -41,15 +42,20 @@ export default function FallingParticles() {
             repeat: Infinity,
             ease: "linear"
           }}
-          className="absolute"
+          className="absolute text-white"
           style={{
             left: `${p.left}%`,
             top: -30,
-            fontSize: p.size,
-            filter: "drop-shadow(0 0 5px rgba(255, 105, 180, 0.5))"
+            filter: "drop-shadow(0 0 8px rgba(255, 255, 255, 0.8))"
           }}
         >
-          {p.id % 3 === 0 ? '🌸' : p.id % 3 === 1 ? '💖' : '✨'}
+          {p.id % 3 === 0 ? (
+            <Heart size={p.size} fill="currentColor" />
+          ) : p.id % 3 === 1 ? (
+            <Star size={p.size} fill="currentColor" />
+          ) : (
+            <Sparkles size={p.size} />
+          )}
         </motion.div>
       ))}
     </div>
