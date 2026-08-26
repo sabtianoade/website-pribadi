@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, Heart, Coffee, MessageCircleHeart, Music, Play, Pause, Mail, MailOpen } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
+import FallingParticles from "@/components/FallingParticles";
 
 const photos = [
   { src: "/momen-netha-1.jpeg", alt: "Netha 1", rotate: -4 },
@@ -57,6 +58,9 @@ export default function AyangPage() {
   return (
     <main className="min-h-screen bg-[var(--background)] text-[var(--foreground)] overflow-hidden font-sans pb-24 relative transition-colors duration-300">
       
+      {/* Falling Particles Effect */}
+      <FallingParticles />
+
       {/* Background Enhancements */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-black w-full h-[100dvh]">
         {/* Video Background */}
