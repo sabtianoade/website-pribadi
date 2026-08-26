@@ -344,7 +344,7 @@ export default function AyangPage() {
                         <MailOpen size={24} />
                       </div>
                       <p className="text-[var(--foreground)] text-lg md:text-xl font-medium leading-relaxed italic font-serif">
-                        "neth thankyou ya , meski aku belom kenal kamu lebih jauh tapi kamu berhasil bikin aku ketawa lepas meski kita belom sejauh itu, itu udah nfjsjufcbjs banget wkwkwk. <br/><br/> moga kita bisa kenal lebih jauh ? ya? , kita gini terus . nice to meet u hehehe. kamu cantik, kamu pantes dapet cowo yang bener bener cakep dan baik buat kamu"
+                        "neth thankyou ya , meski aku belom kenal kamu lebih jauh tapi kamu berhasil bikin aku ketawa lepas meski kita belom sejauh itu, itu udah nfjsjufcbjs banget wkwkwk. <br/><br/> moga kita bisa kenal lebih jauh ? ya? , kita gini terus . nice to meet u hehehe. kamu cantik, kamu pantes dapet cowo yang bener bener cakep dan baik buat kamu. kamu mau siapapun asal dia baikk dan ngusahin kamu , aku bakal support kamuu neth"
                       </p>
                       <p className="text-[var(--muted)] mt-4 text-sm font-semibold tracking-widest uppercase">
                         - Thomas
