@@ -249,13 +249,21 @@ export default function AyangPage() {
               viewport={{ once: true }}
               whileHover={{ scale: 1.02 }}
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              className="relative flex items-center justify-center gap-6 w-full p-8 md:p-12 rounded-[2.5rem] border border-[var(--card-border)] overflow-hidden shadow-2xl bg-[var(--card)] text-center hover:border-[var(--primary)] transition-colors duration-500"
+              className="relative w-full p-4 md:p-8 rounded-[2.5rem] border border-[var(--card-border)] overflow-hidden shadow-2xl bg-[var(--card)] hover:border-[var(--primary)] transition-colors duration-500"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-[var(--primary)]/5 via-transparent to-transparent opacity-50" />
-              <div className="relative z-10">
-                <p className="text-[var(--foreground)] text-lg md:text-xl font-medium leading-relaxed italic">
-                  "aduhhhh favsong apa neth wkwk aku masi gatau nyak, wa ak ya"
-                </p>
+              <div className="relative z-10 w-full flex justify-center">
+                <iframe 
+                  style={{ borderRadius: "12px" }} 
+                  src="https://open.spotify.com/embed/track/2XLfz8AHIhFH5tTfhx1lWR?utm_source=generator&theme=0" 
+                  width="100%" 
+                  height="152" 
+                  frameBorder="0" 
+                  allowFullScreen={false} 
+                  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                  loading="lazy"
+                  className="max-w-[500px]"
+                ></iframe>
               </div>
             </motion.div>
           </div>
