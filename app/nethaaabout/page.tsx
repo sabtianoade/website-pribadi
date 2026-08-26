@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform, AnimatePresence } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, Heart, Coffee, MessageCircleHeart, Music, Play, Pause, Mail, MailOpen, Lock } from "lucide-react";
+import Tilt from "react-parallax-tilt";
 import confetti from "canvas-confetti";
 import { useState, useRef, useEffect } from "react";
 import FallingParticles from "@/components/FallingParticles";
@@ -270,24 +271,35 @@ export default function AyangPage() {
                 whileInView={{ opacity: 1, y: 0, rotate: photo.rotate }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1, type: "spring", stiffness: 200, damping: 20 }}
-                whileHover={{ scale: 1.08, rotate: 0, zIndex: 20, y: -10 }}
-                className="relative bg-[var(--card)] p-3 pb-16 md:p-4 md:pb-20 rounded-[1.5rem] shadow-xl hover:shadow-[0_0_30px_rgba(255,20,147,0.4)] border border-[var(--card-border)] w-[240px] md:w-[280px] transition-all duration-300 group hover:border-[var(--primary)]"
+                className="z-10 hover:z-20"
               >
-                <div className="relative w-full aspect-square overflow-hidden bg-black/20 rounded-xl flex items-center justify-center border border-white/5 group-hover:border-[var(--primary)]/30 transition-colors duration-300">
-                  {photo.isComingSoon ? (
-                    <span className="text-[var(--muted)] font-medium tracking-widest uppercase text-sm">Coming Soon</span>
-                  ) : (
-                    <Image 
-                      src={photo.src}
-                      alt={photo.alt}
-                      fill
-                      className="object-cover opacity-80 group-hover:opacity-100 grayscale-[0.2] group-hover:grayscale-0 transition-all duration-500"
-                    />
-                  )}
-                </div>
-                <div className="absolute bottom-4 md:bottom-6 left-0 w-full text-center px-4">
-                  <p className="font-mono text-[var(--muted)] text-sm md:text-base font-semibold truncate group-hover:text-[var(--primary)] transition-colors">{photo.alt}</p>
-                </div>
+                <Tilt 
+                  glareEnable={true} 
+                  glareMaxOpacity={0.4} 
+                  glareColor="#ff69b4" 
+                  glarePosition="all" 
+                  scale={1.08} 
+                  transitionSpeed={2500}
+                  tiltMaxAngleX={15}
+                  tiltMaxAngleY={15}
+                  className="relative bg-[var(--card)] p-3 pb-16 md:p-4 md:pb-20 rounded-[1.5rem] shadow-xl hover:shadow-[0_0_30px_rgba(255,20,147,0.4)] border border-[var(--card-border)] w-[240px] md:w-[280px] transition-all duration-300 group hover:border-[var(--primary)] cursor-pointer"
+                >
+                  <div className="relative w-full aspect-square overflow-hidden bg-black/20 rounded-xl flex items-center justify-center border border-white/5 group-hover:border-[var(--primary)]/30 transition-colors duration-300">
+                    {photo.isComingSoon ? (
+                      <span className="text-[var(--muted)] font-medium tracking-widest uppercase text-sm">Coming Soon</span>
+                    ) : (
+                      <Image 
+                        src={photo.src}
+                        alt={photo.alt}
+                        fill
+                        className="object-cover opacity-80 group-hover:opacity-100 grayscale-[0.2] group-hover:grayscale-0 transition-all duration-500"
+                      />
+                    )}
+                  </div>
+                  <div className="absolute bottom-4 md:bottom-6 left-0 w-full text-center px-4 pointer-events-none">
+                    <p className="font-mono text-[var(--muted)] text-sm md:text-base font-semibold truncate group-hover:text-[var(--primary)] transition-colors">{photo.alt}</p>
+                  </div>
+                </Tilt>
               </motion.div>
             ))}
           </div>
@@ -461,6 +473,16 @@ export default function AyangPage() {
           <p className="text-[var(--muted)] text-sm font-medium tracking-wider uppercase opacity-50">
             made with heart ni neth wkwk ❤️
           </p>
+          
+          {/* Secret Mirrored Text */}
+          <div className="text-center mt-2 flex justify-center items-center">
+            <p 
+              className="text-[var(--muted)]/20 text-[10px] md:text-xs scale-x-[-1] inline-block select-all cursor-help hover:text-[var(--primary)]/50 transition-colors"
+              title="Coba baca di depan cermin :)"
+            >
+              aku bener-bener beruntung bisa kenal kamu, neth. you're special.
+            </p>
+          </div>
         </motion.div>
 
         {/* Empty Space for Cinematic Video Reveal */}
