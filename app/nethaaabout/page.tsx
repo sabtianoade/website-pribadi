@@ -172,7 +172,7 @@ export default function AyangPage() {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1, type: "spring", stiffness: 200, damping: 20 }}
                 whileHover={{ scale: 1.08, rotate: 0, zIndex: 20, y: -10 }}
-                className="relative bg-[var(--card)] p-3 pb-16 md:p-4 md:pb-20 rounded-[1.5rem] shadow-xl hover:shadow-2xl border border-[var(--card-border)] w-[240px] md:w-[280px] transition-all duration-300 group hover:border-[var(--primary)]"
+                className="relative bg-[var(--card)] p-3 pb-16 md:p-4 md:pb-20 rounded-[1.5rem] shadow-xl hover:shadow-[0_0_30px_rgba(255,20,147,0.4)] border border-[var(--card-border)] w-[240px] md:w-[280px] transition-all duration-300 group hover:border-[var(--primary)]"
               >
                 <div className="relative w-full aspect-square overflow-hidden bg-black/20 rounded-xl flex items-center justify-center border border-white/5 group-hover:border-[var(--primary)]/30 transition-colors duration-300">
                   {photo.isComingSoon ? (
@@ -210,27 +210,33 @@ export default function AyangPage() {
                 viewport={{ once: true }}
                 whileHover={{ scale: 1.02 }}
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                className="relative flex flex-col md:flex-row items-center text-center md:text-left gap-6 md:gap-8 w-full p-6 md:p-10 rounded-[2.5rem] border border-[var(--card-border)] overflow-hidden group shadow-2xl cursor-pointer hover:border-[var(--primary)] transition-colors duration-500 bg-[var(--card)]"
+                className="relative w-full rounded-[2.5rem] p-[2px] overflow-hidden group shadow-2xl cursor-pointer transition-all duration-500"
               >
-                {/* Subtle gradient background */}
-                <div className="absolute inset-0 bg-gradient-to-br from-[var(--primary)]/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                {/* Rotating Gradient Border Background */}
+                <div className="absolute inset-[-100%] bg-[conic-gradient(from_90deg_at_50%_50%,var(--primary)_0%,transparent_50%,var(--primary)_100%)] animate-[spin_4s_linear_infinite] opacity-30 group-hover:opacity-100 transition-opacity duration-500" />
                 
-                <div className="relative w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden shrink-0 border-4 border-white/5 group-hover:border-[var(--primary)]/30 shadow-xl group-hover:rotate-12 transition-all duration-700">
-                  <Image 
-                    src={drink.img}
-                    alt={drink.name}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <div className="relative z-10 flex-1 flex flex-col items-center md:items-start">
-                  <h3 className="font-extrabold text-2xl md:text-4xl text-[var(--foreground)] group-hover:text-[var(--primary)] transition-colors duration-300 mb-3 tracking-tight drop-shadow-sm">
-                    {drink.name}
-                  </h3>
-                  <div className="border-l-2 md:border-l-2 border-t-2 md:border-t-0 border-[var(--primary)]/30 pt-3 md:pt-0 pl-0 md:pl-4 md:py-1 mt-2 md:mt-0">
-                    <p className="text-[var(--muted)] text-sm md:text-lg leading-relaxed italic">
-                      "{drink.desc}"
-                    </p>
+                {/* Inner Card */}
+                <div className="relative flex flex-col md:flex-row items-center text-center md:text-left gap-6 md:gap-8 w-full p-6 md:p-10 rounded-[2.4rem] bg-[var(--card)] overflow-hidden z-10 h-full">
+                  {/* Subtle gradient background */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-[var(--primary)]/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  
+                  <div className="relative w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden shrink-0 border-4 border-white/5 group-hover:border-[var(--primary)]/50 shadow-xl group-hover:rotate-12 transition-all duration-700">
+                    <Image 
+                      src={drink.img}
+                      alt={drink.name}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <div className="relative z-10 flex-1 flex flex-col items-center md:items-start">
+                    <h3 className="font-extrabold text-2xl md:text-4xl text-[var(--foreground)] group-hover:text-[var(--primary)] transition-colors duration-300 mb-3 tracking-tight drop-shadow-sm">
+                      {drink.name}
+                    </h3>
+                    <div className="border-l-2 md:border-l-2 border-t-2 md:border-t-0 border-[var(--primary)]/50 pt-3 md:pt-0 pl-0 md:pl-4 md:py-1 mt-2 md:mt-0">
+                      <p className="text-[var(--muted)] text-sm md:text-lg leading-relaxed italic group-hover:text-[var(--foreground)] transition-colors">
+                        "{drink.desc}"
+                      </p>
+                    </div>
                   </div>
                 </div>
               </motion.div>
@@ -252,21 +258,27 @@ export default function AyangPage() {
               viewport={{ once: true }}
               whileHover={{ scale: 1.02 }}
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              className="relative w-full p-4 md:p-8 rounded-[2.5rem] border border-[var(--card-border)] overflow-hidden shadow-2xl bg-[var(--card)] hover:border-[var(--primary)] transition-colors duration-500"
+              className="relative w-full rounded-[2.5rem] p-[2px] overflow-hidden group shadow-2xl transition-all duration-500"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-[var(--primary)]/5 via-transparent to-transparent opacity-50" />
-              <div className="relative z-10 w-full flex justify-center">
-                <iframe 
-                  style={{ borderRadius: "12px" }} 
-                  src="https://open.spotify.com/embed/track/2XLfz8AHIhFH5tTfhx1lWR?utm_source=generator&theme=0" 
-                  width="100%" 
-                  height="152" 
-                  frameBorder="0" 
-                  allowFullScreen={false} 
-                  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
-                  loading="lazy"
-                  className="max-w-[500px]"
-                ></iframe>
+              {/* Rotating Gradient Border Background */}
+              <div className="absolute inset-[-100%] bg-[conic-gradient(from_90deg_at_50%_50%,var(--primary)_0%,transparent_50%,var(--primary)_100%)] animate-[spin_4s_linear_infinite] opacity-30 group-hover:opacity-100 transition-opacity duration-500" />
+              
+              {/* Inner Card */}
+              <div className="relative w-full h-full bg-[var(--card)] p-4 md:p-8 rounded-[2.4rem] overflow-hidden z-10">
+                <div className="absolute inset-0 bg-gradient-to-br from-[var(--primary)]/5 via-transparent to-transparent opacity-50" />
+                <div className="relative z-10 w-full flex justify-center">
+                  <iframe 
+                    style={{ borderRadius: "12px" }} 
+                    src="https://open.spotify.com/embed/track/2XLfz8AHIhFH5tTfhx1lWR?utm_source=generator&theme=0" 
+                    width="100%" 
+                    height="152" 
+                    frameBorder="0" 
+                    allowFullScreen={false} 
+                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                    loading="lazy"
+                    className="max-w-[500px]"
+                  ></iframe>
+                </div>
               </div>
             </motion.div>
           </div>
