@@ -52,7 +52,7 @@ export default function AyangPage() {
     <main className="min-h-screen bg-[var(--background)] text-[var(--foreground)] overflow-hidden font-sans pb-24 relative transition-colors duration-300">
       
       {/* Background Enhancements */}
-      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden bg-black">
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-black w-full h-[100dvh]">
         {/* Video Background */}
         <video 
           autoPlay 
