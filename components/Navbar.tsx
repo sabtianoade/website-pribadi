@@ -7,6 +7,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { useTransition } from "./PageTransitionProvider";
 import ThemeToggle from "./ThemeToggle";
 import SecretFightGame from "./SecretFightGame";
+import confetti from "canvas-confetti";
 
 const mainLinks = [
   { label: "Beranda", href: "#home" },
@@ -84,6 +85,28 @@ export default function Navbar() {
     if (el) el.scrollIntoView({ behavior: "smooth" });
   };
 
+  const handleSecretAyangClick = () => {
+    const heartShape = confetti.shapeFromText({ text: '❤️', scalar: 2 });
+    const defaults = { 
+      spread: 360, 
+      ticks: 100, 
+      gravity: 0, 
+      decay: 0.94, 
+      startVelocity: 30, 
+      shapes: [heartShape],
+      colors: ['#FF1493', '#FF0000', '#FF69B4', '#FFC0CB'] 
+    };
+
+    // Heart explosion
+    confetti({ ...defaults, particleCount: 50, scalar: 2 });
+    confetti({ ...defaults, particleCount: 25, scalar: 3 });
+    confetti({ ...defaults, particleCount: 10, scalar: 4 });
+
+    setTimeout(() => {
+      navigate("/nethaaabout");
+    }, 1200);
+  };
+
   return (
     <>
       <header
@@ -108,9 +131,17 @@ export default function Navbar() {
           {/* Logo */}
           <div className="flex items-center">
             <button
-              onClick={() => handleNavClick("#home")}
+              onClick={(e) => {
+                e.preventDefault();
+                // Custom double-tap logic for mobile & desktop
+                if (e.detail === 1) {
+                  handleNavClick("#home");
+                } else if (e.detail === 2) {
+                  handleSecretAyangClick();
+                }
+              }}
               aria-label="Ke beranda"
-              className="text-xl font-black tracking-tight transition-opacity hover:opacity-70"
+              className="text-xl font-black tracking-tight transition-opacity hover:opacity-70 select-none touch-manipulation"
               style={{ color: "var(--primary)" }}
             >
               thomas
