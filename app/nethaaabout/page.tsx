@@ -277,7 +277,7 @@ export default function AyangPage() {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 1 }}
         onClick={togglePlay}
-        className="fixed bottom-6 right-6 z-50 p-4 rounded-full bg-[var(--card)] border border-[var(--card-border)] shadow-2xl hover:border-[var(--primary)] transition-all flex items-center justify-center group"
+        className="fixed bottom-6 left-6 z-50 p-4 rounded-full bg-[var(--card)] border border-[var(--card-border)] shadow-2xl hover:border-[var(--primary)] transition-all flex items-center justify-center group"
       >
         <div className="absolute inset-0 rounded-full bg-[var(--primary)]/10 opacity-0 group-hover:opacity-100 transition-opacity" />
         {isPlaying ? (
