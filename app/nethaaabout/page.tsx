@@ -3,7 +3,7 @@
 import { motion, useScroll, useTransform, AnimatePresence } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, Heart, Coffee, MessageCircleHeart, Music, Play, Pause, Mail, MailOpen } from "lucide-react";
+import { ArrowLeft, Heart, Coffee, MessageCircleHeart, Music, Play, Pause, Mail, MailOpen, Lock } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import FallingParticles from "@/components/FallingParticles";
 
@@ -24,8 +24,11 @@ const chatScreenshots = [
 ];
 
 export default function AyangPage() {
-  const [isPlaying, setIsPlaying] = useState(true); // Default to true for autoplay
+  const [isPlaying, setIsPlaying] = useState(false); // Play only after unlock
   const [isEnvelopeOpen, setIsEnvelopeOpen] = useState(false);
+  const [isUnlocked, setIsUnlocked] = useState(false);
+  const [passwordInput, setPasswordInput] = useState("");
+  const [isError, setIsError] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   // Scroll animations for video background reveal
@@ -33,16 +36,15 @@ export default function AyangPage() {
   const videoOpacity = useTransform(scrollYProgress, [0.75, 1], [0.25, 0.85]);
   const overlayOpacity = useTransform(scrollYProgress, [0.75, 1], [1, 0]);
 
-  // Attempt to play on mount since navigation is usually triggered by a user click
+  // Attempt to play only when unlocked
   useEffect(() => {
-    if (audioRef.current) {
+    if (isUnlocked && audioRef.current) {
       audioRef.current.play().catch(e => {
-        // Autoplay was prevented by browser
         console.log("Autoplay prevented:", e);
         setIsPlaying(false);
       });
     }
-  }, []);
+  }, [isUnlocked]);
 
   const togglePlay = () => {
     if (audioRef.current) {
@@ -56,10 +58,80 @@ export default function AyangPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[var(--background)] text-[var(--foreground)] overflow-hidden font-sans pb-24 relative transition-colors duration-300">
-      
-      {/* Falling Particles Effect */}
-      <FallingParticles />
+    <>
+      <AnimatePresence mode="wait">
+        {!isUnlocked ? (
+          <motion.main 
+            key="locked"
+            exit={{ opacity: 0, scale: 1.1, filter: "blur(10px)" }}
+            transition={{ duration: 0.8 }}
+            className="min-h-[100dvh] bg-[var(--background)] flex items-center justify-center relative overflow-hidden p-4"
+          >
+            <FallingParticles />
+            <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden bg-black w-full h-[100dvh]">
+              <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover mix-blend-luminosity opacity-20">
+                <source src="/bg-video.mp4" type="video/mp4" />
+              </video>
+              <div className="absolute inset-0 bg-gradient-to-b from-[var(--background)]/40 via-[var(--background)]/80 to-[var(--background)]" />
+            </div>
+
+            <motion.div 
+              initial={{ opacity: 0, y: 20, scale: 0.9 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.5 }}
+              className="relative z-10 bg-[var(--card)]/80 backdrop-blur-xl p-8 md:p-12 rounded-[2.5rem] border border-[var(--card-border)] shadow-2xl flex flex-col items-center max-w-sm w-full text-center"
+            >
+              <div className="w-20 h-20 rounded-full bg-[var(--primary)]/10 flex items-center justify-center text-[var(--primary)] mb-6 shadow-[0_0_30px_rgba(255,20,147,0.3)]">
+                <Lock size={40} />
+              </div>
+              <h2 className="text-2xl font-extrabold text-[var(--foreground)] mb-2 tracking-tight">Private Space</h2>
+              <p className="text-[var(--muted)] text-sm mb-8 font-medium">Masukkan password rahasia untuk masuk.</p>
+              
+              <form 
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (passwordInput === "17082026") {
+                    setIsUnlocked(true);
+                    setIsPlaying(true);
+                  } else {
+                    setIsError(true);
+                    setTimeout(() => setIsError(false), 1000);
+                  }
+                }}
+                className="w-full flex flex-col gap-4"
+              >
+                <input 
+                  type="password"
+                  placeholder="Password..."
+                  value={passwordInput}
+                  onChange={(e) => setPasswordInput(e.target.value)}
+                  className={`w-full bg-black/30 border ${isError ? 'border-red-500' : 'border-[var(--card-border)]'} focus:border-[var(--primary)] rounded-xl px-4 py-4 text-center text-[var(--foreground)] tracking-[0.5em] font-mono outline-none transition-all duration-300`}
+                />
+                {isError && (
+                  <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-red-500 text-xs font-medium">
+                    Password salah! Coba lagi wkwk.
+                  </motion.p>
+                )}
+                <button 
+                  type="submit"
+                  className="w-full bg-[var(--primary)] text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-[0_0_20px_var(--primary)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 uppercase tracking-widest text-sm"
+                >
+                  Unlock
+                </button>
+              </form>
+            </motion.div>
+          </motion.main>
+        ) : (
+          <motion.main 
+            key="unlocked"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.2 }}
+            className="min-h-screen bg-[var(--background)] text-[var(--foreground)] overflow-hidden font-sans pb-24 relative transition-colors duration-300"
+          >
+            
+            {/* Falling Particles Effect */}
+            <FallingParticles />
 
       {/* Background Enhancements */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-black w-full h-[100dvh]">
@@ -384,7 +456,7 @@ export default function AyangPage() {
       </div>
       
       {/* Background Audio */}
-      <audio ref={audioRef} src="/backsound.mp3" loop autoPlay />
+      <audio ref={audioRef} src="/backsound.mp3" loop />
       
       {/* Floating Music Control */}
       <motion.button
@@ -401,6 +473,9 @@ export default function AyangPage() {
           <Play size={24} className="text-[var(--foreground)] group-hover:text-[var(--primary)] transition-colors ml-1" />
         )}
       </motion.button>
-    </main>
+    </motion.main>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
