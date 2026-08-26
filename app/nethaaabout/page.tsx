@@ -130,12 +130,15 @@ export default function AyangPage() {
             {["/fotbar-1.jpeg", "/fotbar-2.jpeg", "/fotbar-3.jpeg"].map((src, i) => (
               <motion.div
                 key={i}
+                tabIndex={0}
                 initial={{ opacity: 0, scale: 0.8, rotate: 0, x: 0 }}
                 whileInView={{ opacity: 1, scale: 1, rotate: (i - 1) * 10, x: (i - 1) * 50 }}
                 viewport={{ once: true }}
                 whileHover={{ scale: 1.05, rotate: (i - 1) * 15, zIndex: 50, y: -20, x: (i - 1) * 90 }}
+                whileFocus={{ scale: 1.05, rotate: (i - 1) * 15, zIndex: 50, y: -20, x: (i - 1) * 90 }}
+                whileTap={{ scale: 1.05, rotate: (i - 1) * 15, zIndex: 50, y: -20, x: (i - 1) * 90 }}
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                className="absolute bg-[var(--card)] p-2 md:p-4 pb-10 md:pb-16 rounded-xl md:rounded-[1.5rem] shadow-2xl border border-[var(--card-border)] w-[160px] md:w-[320px] origin-bottom cursor-pointer hover:border-[var(--primary)] transition-colors duration-300"
+                className="absolute bg-[var(--card)] p-2 md:p-4 pb-10 md:pb-16 rounded-xl md:rounded-[1.5rem] shadow-2xl border border-[var(--card-border)] w-[160px] md:w-[320px] origin-bottom cursor-pointer hover:border-[var(--primary)] focus:border-[var(--primary)] outline-none transition-colors duration-300"
                 style={{ zIndex: i * 10 }}
               >
                 <div className="relative w-full aspect-[4/5] overflow-hidden bg-black/20 rounded-xl pointer-events-none">
