@@ -1,9 +1,9 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "motion/react";
+import { motion, useScroll, useTransform, AnimatePresence } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, Heart, Coffee, MessageCircleHeart, Music, Play, Pause } from "lucide-react";
+import { ArrowLeft, Heart, Coffee, MessageCircleHeart, Music, Play, Pause, Mail, MailOpen } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 
 const photos = [
@@ -24,6 +24,7 @@ const chatScreenshots = [
 
 export default function AyangPage() {
   const [isPlaying, setIsPlaying] = useState(true); // Default to true for autoplay
+  const [isEnvelopeOpen, setIsEnvelopeOpen] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   // Scroll animations for video background reveal
@@ -284,7 +285,73 @@ export default function AyangPage() {
           </div>
         </section>
 
+        {/* Secret Message Section */}
+        <section className="mb-32">
+          <div className="flex items-center justify-center gap-3 mb-12">
+            <Mail size={24} className="text-[var(--foreground)]" />
+            <h2 className="text-2xl font-bold text-[var(--foreground)]">pesan rahasia</h2>
+          </div>
 
+          <div className="flex justify-center max-w-2xl mx-auto px-4">
+            <motion.div
+              layout
+              onClick={() => setIsEnvelopeOpen(!isEnvelopeOpen)}
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              whileInView={{ opacity: 1, scale: 1, y: 0 }}
+              viewport={{ once: true }}
+              whileHover={{ scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              className={`relative w-full rounded-[2.5rem] p-[2px] overflow-hidden shadow-2xl cursor-pointer transition-all duration-500 group ${isEnvelopeOpen ? 'border-none' : 'border border-[var(--card-border)] hover:border-[var(--primary)]'}`}
+            >
+              {isEnvelopeOpen && (
+                 <div className="absolute inset-[-100%] bg-[conic-gradient(from_90deg_at_50%_50%,var(--primary)_0%,transparent_50%,var(--primary)_100%)] animate-[spin_4s_linear_infinite] opacity-40" />
+              )}
+              
+              <motion.div 
+                layout
+                className="relative z-10 w-full h-full bg-[var(--card)] p-8 md:p-12 rounded-[2.4rem] overflow-hidden flex flex-col items-center justify-center text-center"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-[var(--primary)]/5 via-transparent to-transparent opacity-50" />
+                
+                <AnimatePresence mode="wait">
+                  {!isEnvelopeOpen ? (
+                    <motion.div
+                      key="closed"
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.8 }}
+                      className="flex flex-col items-center gap-4"
+                    >
+                      <div className="w-16 h-16 rounded-full bg-[var(--primary)]/10 flex items-center justify-center text-[var(--primary)] group-hover:scale-110 transition-transform">
+                        <Mail size={32} />
+                      </div>
+                      <p className="text-[var(--foreground)] font-bold text-lg">Ada satu pesan lagi nih...</p>
+                      <p className="text-[var(--muted)] text-sm animate-pulse">(Tap untuk buka)</p>
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="opened"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      className="flex flex-col items-center gap-6"
+                    >
+                      <div className="w-12 h-12 rounded-full bg-[var(--primary)]/20 flex items-center justify-center text-[var(--primary)] mb-2">
+                        <MailOpen size={24} />
+                      </div>
+                      <p className="text-[var(--foreground)] text-lg md:text-2xl font-medium leading-relaxed italic font-serif">
+                        "Coba ketik isi pesannya disini woyy, biar surprise haha, ketik aja bebas dari kamu"
+                      </p>
+                      <p className="text-[var(--muted)] mt-4 text-sm font-semibold tracking-widest uppercase">
+                        - Thomas
+                      </p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            </motion.div>
+          </div>
+        </section>
         
         {/* Footer Note */}
         <motion.div 
