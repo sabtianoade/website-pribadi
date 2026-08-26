@@ -117,16 +117,16 @@ export default function AyangPage() {
             <h2 className="text-2xl font-bold text-[var(--foreground)]">You & Me</h2>
           </div>
           
-          <div className="relative flex justify-center items-center h-[450px] md:h-[550px] mt-10">
+          <div className="relative flex justify-center items-center h-[350px] md:h-[550px] mt-10">
             {["/fotbar-1.jpeg", "/fotbar-2.jpeg", "/fotbar-3.jpeg"].map((src, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, scale: 0.8, rotate: 0, x: 0 }}
-                whileInView={{ opacity: 1, scale: 1, rotate: (i - 1) * 15, x: (i - 1) * 120 }}
+                whileInView={{ opacity: 1, scale: 1, rotate: (i - 1) * 10, x: (i - 1) * 50 }}
                 viewport={{ once: true }}
-                whileHover={{ scale: 1.1, rotate: (i - 1) * 20, zIndex: 50, y: -30, x: (i - 1) * 140 }}
+                whileHover={{ scale: 1.05, rotate: (i - 1) * 15, zIndex: 50, y: -20, x: (i - 1) * 90 }}
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                className="absolute bg-[var(--card)] p-3 md:p-4 pb-12 md:pb-16 rounded-[1.5rem] shadow-2xl border border-[var(--card-border)] w-[220px] md:w-[320px] origin-bottom cursor-pointer hover:border-[var(--primary)] transition-colors duration-300"
+                className="absolute bg-[var(--card)] p-2 md:p-4 pb-10 md:pb-16 rounded-xl md:rounded-[1.5rem] shadow-2xl border border-[var(--card-border)] w-[160px] md:w-[320px] origin-bottom cursor-pointer hover:border-[var(--primary)] transition-colors duration-300"
                 style={{ zIndex: i * 10 }}
               >
                 <div className="relative w-full aspect-[4/5] overflow-hidden bg-black/20 rounded-xl pointer-events-none">
@@ -198,12 +198,12 @@ export default function AyangPage() {
                 viewport={{ once: true }}
                 whileHover={{ scale: 1.02 }}
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                className="relative flex items-center gap-6 md:gap-8 w-full p-6 md:p-10 rounded-[2.5rem] border border-[var(--card-border)] overflow-hidden group shadow-2xl cursor-pointer hover:border-[var(--primary)] transition-colors duration-500 bg-[var(--card)]"
+                className="relative flex flex-col md:flex-row items-center text-center md:text-left gap-6 md:gap-8 w-full p-6 md:p-10 rounded-[2.5rem] border border-[var(--card-border)] overflow-hidden group shadow-2xl cursor-pointer hover:border-[var(--primary)] transition-colors duration-500 bg-[var(--card)]"
               >
                 {/* Subtle gradient background */}
                 <div className="absolute inset-0 bg-gradient-to-br from-[var(--primary)]/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 
-                <div className="relative w-28 h-28 md:w-40 md:h-40 rounded-full overflow-hidden shrink-0 border-4 border-white/5 group-hover:border-[var(--primary)]/30 shadow-xl group-hover:rotate-12 transition-all duration-700">
+                <div className="relative w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden shrink-0 border-4 border-white/5 group-hover:border-[var(--primary)]/30 shadow-xl group-hover:rotate-12 transition-all duration-700">
                   <Image 
                     src={drink.img}
                     alt={drink.name}
@@ -211,11 +211,11 @@ export default function AyangPage() {
                     className="object-cover"
                   />
                 </div>
-                <div className="relative z-10 flex-1">
+                <div className="relative z-10 flex-1 flex flex-col items-center md:items-start">
                   <h3 className="font-extrabold text-2xl md:text-4xl text-[var(--foreground)] group-hover:text-[var(--primary)] transition-colors duration-300 mb-3 tracking-tight drop-shadow-sm">
                     {drink.name}
                   </h3>
-                  <div className="border-l-2 border-[var(--primary)]/30 pl-4 py-1">
+                  <div className="border-l-2 md:border-l-2 border-t-2 md:border-t-0 border-[var(--primary)]/30 pt-3 md:pt-0 pl-0 md:pl-4 md:py-1 mt-2 md:mt-0">
                     <p className="text-[var(--muted)] text-sm md:text-lg leading-relaxed italic">
                       "{drink.desc}"
                     </p>
