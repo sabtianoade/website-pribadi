@@ -108,7 +108,7 @@ export default function AyangPage() {
                 <Lock size={40} />
               </div>
               <h2 className="text-2xl font-extrabold text-[var(--foreground)] mb-2 tracking-tight">Private Space</h2>
-              <p className="text-[var(--muted)] text-sm mb-8 font-medium">Masukkan password rahasia untuk masuk.</p>
+              <p className="text-[var(--muted)] text-sm mb-8 font-medium">tanya ke thomas tapi panggilnya thomas gantengg</p>
               
               <form 
                 onSubmit={(e) => {
