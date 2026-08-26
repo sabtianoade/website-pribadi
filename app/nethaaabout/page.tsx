@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
+import { motion, useScroll, useTransform } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, Heart, Coffee, MessageCircleHeart, Music, Play, Pause } from "lucide-react";
@@ -25,6 +25,11 @@ const chatScreenshots = [
 export default function AyangPage() {
   const [isPlaying, setIsPlaying] = useState(true); // Default to true for autoplay
   const audioRef = useRef<HTMLAudioElement>(null);
+
+  // Scroll animations for video background reveal
+  const { scrollYProgress } = useScroll();
+  const videoOpacity = useTransform(scrollYProgress, [0.75, 1], [0.25, 0.85]);
+  const overlayOpacity = useTransform(scrollYProgress, [0.75, 1], [1, 0]);
 
   // Attempt to play on mount since navigation is usually triggered by a user click
   useEffect(() => {
@@ -54,15 +59,16 @@ export default function AyangPage() {
       {/* Background Enhancements */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-black w-full h-[100dvh]">
         {/* Video Background */}
-        <video 
+        <motion.video 
           autoPlay 
           loop 
           muted 
           playsInline 
-          className="absolute inset-0 w-full h-full object-cover opacity-25 mix-blend-luminosity"
+          style={{ opacity: videoOpacity }}
+          className="absolute inset-0 w-full h-full object-cover mix-blend-luminosity"
         >
           <source src="/bg-video.mp4" type="video/mp4" />
-        </video>
+        </motion.video>
         
         {/* Ambient Glowing Orbs */}
         <div className="absolute top-0 left-[10%] w-[600px] h-[600px] bg-pink-500/10 rounded-full blur-[150px] mix-blend-screen animate-pulse" style={{ animationDuration: '8s' }} />
@@ -70,7 +76,10 @@ export default function AyangPage() {
         <div className="absolute bottom-[10%] left-[-20%] w-[800px] h-[800px] bg-indigo-500/10 rounded-full blur-[150px] mix-blend-screen animate-pulse" style={{ animationDuration: '12s' }} />
         
         {/* Gradient Overlay for seamless blending */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[var(--background)]/10 via-[var(--background)]/60 to-[var(--background)]" />
+        <motion.div 
+          style={{ opacity: overlayOpacity }}
+          className="absolute inset-0 bg-gradient-to-b from-[var(--background)]/40 via-[var(--background)]/80 to-[var(--background)]" 
+        />
       </div>
 
       {/* Navigation */}
@@ -265,6 +274,18 @@ export default function AyangPage() {
             made with heart ni neth wkwk ❤️
           </p>
         </motion.div>
+
+        {/* Empty Space for Cinematic Video Reveal */}
+        <div className="h-[75vh] flex items-end justify-center pb-12 pointer-events-none">
+          <motion.p 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ delay: 0.5, duration: 1.5 }}
+            className="text-white/40 text-xs md:text-sm font-mono tracking-[0.3em] uppercase drop-shadow-md"
+          >
+            Memories in Motion
+          </motion.p>
+        </div>
 
       </div>
       
