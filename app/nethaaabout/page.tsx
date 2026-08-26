@@ -339,8 +339,8 @@ export default function AyangPage() {
                       <div className="w-12 h-12 rounded-full bg-[var(--primary)]/20 flex items-center justify-center text-[var(--primary)] mb-2">
                         <MailOpen size={24} />
                       </div>
-                      <p className="text-[var(--foreground)] text-lg md:text-2xl font-medium leading-relaxed italic font-serif">
-                        "Coba ketik isi pesannya disini woyy, biar surprise haha, ketik aja bebas dari kamu"
+                      <p className="text-[var(--foreground)] text-lg md:text-xl font-medium leading-relaxed italic font-serif">
+                        "neth thankyou ya , meski aku belom kenal kamu lebih jauh tapi kamu berhasil bikin aku ketawa lepas meski kita belom sejauh itu, itu udah nfjsjufcbjs banget wkwkwk. <br/><br/> moga kita akrab terus ya neth , kita gini terus . nice to meet u hehehe. kamu cantik, kamu pantes dapet cowo yang bener bener cakep dan baik buat kamu"
                       </p>
                       <p className="text-[var(--muted)] mt-4 text-sm font-semibold tracking-widest uppercase">
                         - Thomas
