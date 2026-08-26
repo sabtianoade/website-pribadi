@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform, AnimatePresence } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, Heart, Coffee, MessageCircleHeart, Music, Play, Pause, Mail, MailOpen, Lock } from "lucide-react";
+import confetti from "canvas-confetti";
 import { useState, useRef, useEffect } from "react";
 import FallingParticles from "@/components/FallingParticles";
 
@@ -29,6 +30,7 @@ export default function AyangPage() {
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [passwordInput, setPasswordInput] = useState("");
   const [isError, setIsError] = useState(false);
+  const [fireworksFired, setFireworksFired] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   // Scroll animations for video background reveal
@@ -55,6 +57,26 @@ export default function AyangPage() {
       }
       setIsPlaying(!isPlaying);
     }
+  };
+
+  const handleFireworks = () => {
+    if (fireworksFired) return;
+    setFireworksFired(true);
+
+    const duration = 4 * 1000;
+    const animationEnd = Date.now() + duration;
+    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 200 };
+
+    const randomInRange = (min: number, max: number) => Math.random() * (max - min) + min;
+
+    const interval: any = setInterval(function() {
+      const timeLeft = animationEnd - Date.now();
+      if (timeLeft <= 0) return clearInterval(interval);
+
+      const particleCount = 50 * (timeLeft / duration);
+      confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+      confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+    }, 250);
   };
 
   return (
@@ -446,6 +468,7 @@ export default function AyangPage() {
           <motion.p 
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
+            onViewportEnter={() => handleFireworks()}
             transition={{ delay: 0.5, duration: 1.5 }}
             className="text-white/40 text-xs md:text-sm font-mono tracking-[0.3em] uppercase drop-shadow-md"
           >
