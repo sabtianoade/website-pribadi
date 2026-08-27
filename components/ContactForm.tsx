@@ -12,7 +12,7 @@ export default function ContactForm() {
     if (!name || !message) return;
     
     // NOTE: Ganti nomor WA di bawah ini dengan nomor Thomas asli (gunakan kode negara 62)
-    const phoneNumber = "6281234567890"; // GANTI NOMOR INI
+    const phoneNumber = "6289677718775"; // GANTI NOMOR INI
     
     const text = `Halo Thomas! 👋%0A%0AAku ${encodeURIComponent(name)}.%0A${encodeURIComponent(message)}`;
     const waUrl = `https://wa.me/${phoneNumber}?text=${text}`;
@@ -72,7 +72,7 @@ export default function ContactForm() {
           </div>
           <button 
             type="submit"
-            className="w-full bg-[var(--primary)] hover:bg-[var(--primary)]/90 text-white font-bold py-4 rounded-xl shadow-[0_4px_14px_0_rgba(255,20,147,0.39)] hover:shadow-[0_6px_20px_rgba(255,20,147,0.23)] hover:-translate-y-1 active:translate-y-0 transition-all duration-300 flex items-center justify-center gap-2 mt-4"
+            className="w-full bg-[var(--foreground)] text-[var(--background)] hover:bg-[var(--foreground)]/90 font-bold py-4 rounded-xl shadow-lg hover:-translate-y-1 active:translate-y-0 transition-all duration-300 flex items-center justify-center gap-2 mt-4"
           >
             <Send size={18} />
             Kirim via WhatsApp
