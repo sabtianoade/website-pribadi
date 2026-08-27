@@ -8,7 +8,7 @@ export default function SpotifyWidget() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 1, duration: 0.8 }}
-      className="fixed bottom-4 left-4 md:bottom-6 md:left-6 z-40 flex items-center gap-3 md:gap-4 bg-[var(--card)]/80 backdrop-blur-xl border border-[var(--card-border)] p-2 md:p-3 pr-4 md:pr-6 rounded-2xl shadow-xl hover:border-[#1DB954]/50 transition-colors cursor-pointer group scale-90 md:scale-100 origin-bottom-left"
+      className="fixed bottom-20 left-4 md:bottom-24 md:left-6 z-40 flex items-center gap-3 md:gap-4 bg-[var(--card)]/80 backdrop-blur-xl border border-[var(--card-border)] p-2 md:p-3 pr-4 md:pr-6 rounded-2xl shadow-xl hover:border-[#1DB954]/50 transition-colors cursor-pointer group scale-90 md:scale-100 origin-bottom-left"
       onClick={() => window.open("https://open.spotify.com/track/1P6X7VMBGvHiy9Jm0yW3I5", "_blank")} // Default link, bisa diganti
     >
       <div className="relative w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-gradient-to-br from-indigo-900 via-purple-900 to-black border border-white/10">
