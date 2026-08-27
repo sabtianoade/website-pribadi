@@ -215,7 +215,7 @@ export default function AyangPage() {
           <h1 className="text-5xl md:text-7xl font-extrabold mb-6 tracking-tight text-[var(--foreground)] drop-shadow-md">
             Netha About
           </h1>
-          <p className="text-[var(--muted)] text-lg md:text-xl max-w-2xl mx-auto font-medium leading-relaxed">
+          <p className="text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] bg-black/20 backdrop-blur-sm px-6 py-4 rounded-2xl text-lg md:text-xl max-w-2xl mx-auto font-medium leading-relaxed border border-white/10">
             woi tau ga neth , aku bingung mau nambahin apalagi disini , aku tambahin kamu aja . ini tombol rahasiaa buat kamu wkwk.
           </p>
         </motion.section>
