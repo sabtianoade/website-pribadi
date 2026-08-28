@@ -12,7 +12,7 @@ import ConfettiButton from "@/components/ConfettiButton";
 import CustomCursor from "@/components/CustomCursor";
 import ParticlesBackground from "@/components/ParticlesBackground";
 import InteractiveDesk from "@/components/InteractiveDesk";
-import SpotifyWidget from "@/components/SpotifyWidget";
+
 import ContactForm from "@/components/ContactForm";
 
 export default function Home() {
@@ -21,7 +21,7 @@ export default function Home() {
       <ParticlesBackground />
       <CustomCursor />
       <Navbar />
-      <SpotifyWidget />
+
       <main className="relative overflow-hidden">
         <DinoDecoration />
         <ConfettiButton />
