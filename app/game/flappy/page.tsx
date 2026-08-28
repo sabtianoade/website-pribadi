@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import Link from "next/link";
 import { ArrowLeft, RotateCcw } from "lucide-react";
+import ScoreSubmit from "@/components/ScoreSubmit";
 
 const GRAVITY = 0.35;
 const JUMP = -7;
@@ -173,10 +174,13 @@ export default function FlappyPage() {
       <div className="relative w-full max-w-[420px] mx-auto" style={{ border: "1px solid rgba(255,255,255,0.1)", borderRadius: 16, overflow: "hidden", touchAction: "none" }} onClick={jump}>
         <canvas ref={canvasRef} width={420} height={520} style={{ display: "block", cursor: "pointer", width: "100%", height: "auto" }} />
         {display.status === "dead" && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-4" style={{ background: "rgba(0,0,0,0.7)", backdropFilter: "blur(4px)" }}>
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 z-10 pointer-events-auto" style={{ background: "rgba(0,0,0,0.7)", backdropFilter: "blur(4px)" }}>
             <p style={{ color: "white", fontFamily: "monospace", fontSize: 22, fontWeight: 700 }}>GAME OVER</p>
             <p style={{ color: "rgba(255,255,255,0.5)", fontFamily: "monospace", fontSize: 14 }}>Skor kamu: {display.score}</p>
-            <button onClick={(e) => { e.stopPropagation(); resetState(); }} className="flex items-center gap-2 px-5 py-2 rounded-full text-sm hover:opacity-80 transition-opacity" style={{ border: "1px solid rgba(255,255,255,0.3)", color: "white", fontFamily: "monospace", background: "transparent" }}>
+            
+            <ScoreSubmit game="flappy" score={display.score} onSubmitted={() => {}} />
+
+            <button onClick={(e) => { e.stopPropagation(); resetState(); }} className="mt-2 flex items-center gap-2 px-5 py-2 rounded-full text-sm hover:opacity-80 transition-opacity" style={{ border: "1px solid rgba(255,255,255,0.3)", color: "white", fontFamily: "monospace", background: "transparent" }}>
               <RotateCcw size={14} /> main lagi
             </button>
           </div>

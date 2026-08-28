@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import Link from "next/link";
 import { ArrowLeft, RotateCcw } from "lucide-react";
+import ScoreSubmit from "@/components/ScoreSubmit";
 
 const COLS = 10, ROWS = 20, CELL = 28;
 const W = COLS * CELL, H = ROWS * CELL;
@@ -189,10 +190,13 @@ export default function TetrisPage() {
       <div className="relative w-full mx-auto" style={{ maxWidth: W, border: "1px solid rgba(255,255,255,0.1)", borderRadius: 12, overflow: "hidden", touchAction: "none" }}>
         <canvas ref={canvasRef} width={W} height={H} style={{ display: "block", width: "100%", height: "auto" }} />
         {display.status === "dead" && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-4" style={{ background: "rgba(0,0,0,0.8)", backdropFilter: "blur(4px)" }}>
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 z-10" style={{ background: "rgba(0,0,0,0.8)", backdropFilter: "blur(4px)" }}>
             <p style={{ color: "white", fontFamily: "monospace", fontSize: 22, fontWeight: 700 }}>GAME OVER</p>
             <p style={{ color: "rgba(255,255,255,0.5)", fontFamily: "monospace", fontSize: 14 }}>Score: {display.score} · Lines: {display.lines}</p>
-            <button onClick={restart} className="flex items-center gap-2 px-5 py-2 rounded-full text-sm hover:opacity-80 transition-opacity" style={{ border: "1px solid rgba(255,255,255,0.3)", color: "white", fontFamily: "monospace", background: "transparent" }}>
+            
+            <ScoreSubmit game="tetris" score={display.score} onSubmitted={() => {}} />
+
+            <button onClick={restart} className="mt-2 flex items-center gap-2 px-5 py-2 rounded-full text-sm hover:opacity-80 transition-opacity" style={{ border: "1px solid rgba(255,255,255,0.3)", color: "white", fontFamily: "monospace", background: "transparent" }}>
               <RotateCcw size={14} /> main lagi
             </button>
           </div>

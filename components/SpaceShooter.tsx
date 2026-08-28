@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import ScoreSubmit from "@/components/ScoreSubmit";
 
 // Types
 type GameObject = {
@@ -29,6 +30,7 @@ export default function SpaceShooter() {
   const [isGameOver, setIsGameOver] = useState(false);
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
 
   // Game state stored in refs to avoid re-renders
   const stateRef = useRef({
@@ -53,6 +55,7 @@ export default function SpaceShooter() {
   const startGame = () => {
     setIsPlaying(true);
     setIsGameOver(false);
+    setHasSubmitted(false);
     setScore(0);
     
     stateRef.current = {
@@ -304,15 +307,31 @@ export default function SpaceShooter() {
 
         {/* Game Over Overlay */}
         {isGameOver && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-red-900/60 backdrop-blur-md z-30">
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-red-900/60 backdrop-blur-md z-30 pointer-events-auto cursor-default">
             <h2 className="text-4xl font-black text-white mb-2 uppercase tracking-widest drop-shadow-lg">Hancur!</h2>
-            <p className="text-white/80 mb-6 font-mono text-lg">Final Score: {score}</p>
-            <button 
-              onClick={startGame}
-              className="px-6 py-3 bg-white text-black font-bold uppercase rounded-lg hover:scale-105 transition-transform"
-            >
-              Coba Lagi
-            </button>
+            
+            {!hasSubmitted ? (
+              <ScoreSubmit 
+                game="space" 
+                score={score} 
+                onSubmitted={() => setHasSubmitted(true)} 
+              />
+            ) : (
+              <button 
+                onClick={startGame}
+                className="mt-4 px-6 py-3 bg-white text-black font-bold uppercase rounded-lg hover:scale-105 transition-transform"
+              >
+                Coba Lagi
+              </button>
+            )}
+            {!hasSubmitted && (
+              <button 
+                onClick={startGame}
+                className="mt-4 text-xs text-white/50 hover:text-white underline"
+              >
+                Lewati & Coba Lagi
+              </button>
+            )}
           </div>
         )}
       </div>

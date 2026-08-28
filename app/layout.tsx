@@ -5,6 +5,7 @@ import PageTransitionProvider from "@/components/PageTransitionProvider";
 import InitialLoader from "@/components/InitialLoader";
 import ThomasAI from "@/components/ThomasAI";
 import "./globals.css";
+import { supabase } from "@/lib/supabase";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -25,13 +26,23 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Fetch Theme Color from Supabase Settings
+  const { data: settingsData } = await supabase.from("site_settings").select("*");
+  const primaryColor = settingsData?.find(s => s.id === "theme_primary_color")?.value || "#333333";
+
   return (
     <html lang="id" suppressHydrationWarning>
+      <head>
+        <style dangerouslySetInnerHTML={{ __html: `
+          :root { --primary: ${primaryColor} !important; }
+          .dark { --primary: ${primaryColor} !important; }
+        ` }} />
+      </head>
       <body className={`${inter.variable} antialiased`} suppressHydrationWarning>
         <ThemeProvider
           attribute="class"

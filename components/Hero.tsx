@@ -15,8 +15,13 @@ export default function Hero() {
   const [mounted, setMounted] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [accessories, setAccessories] = useState<string[]>([]);
+  
   const [profileImage, setProfileImage] = useState("/upd-foto1.jpeg");
   const [avatarImage, setAvatarImage] = useState("/foto-thomas2.png");
+  
+  // Dynamic Text State
+  const [heroTitle, setHeroTitle] = useState("Hi, I'm Thomas");
+  const [heroSubtitle, setHeroSubtitle] = useState("Front-End Developer & UI/UX Enthusiast");
 
   const toggleAccessory = (acc: string) => {
     setAccessories(prev => prev.includes(acc) ? prev.filter(a => a !== acc) : [...prev, acc]);
@@ -54,7 +59,23 @@ export default function Hero() {
       }
     }
     
+    // Fetch dynamic settings (texts)
+    async function fetchSettings() {
+      try {
+        const { data } = await supabase.from("site_settings").select("*");
+        if (data) {
+          const title = data.find(item => item.id === "hero_title")?.value;
+          const subtitle = data.find(item => item.id === "hero_subtitle")?.value;
+          if (title) setHeroTitle(title);
+          if (subtitle) setHeroSubtitle(subtitle);
+        }
+      } catch (err) {
+        console.error("Error fetching settings:", err);
+      }
+    }
+    
     fetchHeroImages();
+    fetchSettings();
   }, []);
 
   const handleScroll = (id: string) => {
@@ -165,16 +186,27 @@ export default function Hero() {
             variants={container}
             initial="hidden"
             animate="show"
-            className="text-6xl md:text-7xl lg:text-[100px] font-black leading-none tracking-tight flex justify-center lg:justify-start"
+            className="text-5xl md:text-7xl lg:text-[100px] font-black leading-none tracking-tight flex justify-center lg:justify-start flex-wrap"
           >
-            {Array.from("Thomas").map((letter, index) => (
-              <motion.span key={index} variants={item} className="inline-block hover:text-[var(--primary)] transition-colors duration-300">
+            {Array.from(heroTitle).map((letter, index) => (
+              <motion.span 
+                key={index} 
+                variants={item} 
+                className={`inline-block hover:text-[var(--primary)] transition-colors duration-300 ${letter === ' ' ? 'mr-4' : ''}`}
+              >
                 {letter}
               </motion.span>
             ))}
           </motion.h1>
 
-
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+            className="text-xl md:text-2xl font-semibold gradient-text mt-2"
+          >
+            {heroSubtitle}
+          </motion.p>
 
           {/* Social icons */}
           <motion.div
@@ -350,7 +382,7 @@ export default function Hero() {
                   className="absolute bottom-5 left-5"
                   style={{ transform: "translateZ(30px)" }} // 3D pop out
                 >
-                  <p className="text-white font-black text-3xl mb-1 tracking-tight">Thomas</p>
+                  <p className="text-white font-black text-3xl mb-1 tracking-tight">{heroTitle.split(' ').pop() || 'Thomas'}</p>
                 </motion.div>
 
                 {/* --- ACCESSORIES OVERLAY --- */}

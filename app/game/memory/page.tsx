@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { ArrowLeft, RotateCcw } from "lucide-react";
+import ScoreSubmit from "@/components/ScoreSubmit";
 
 const SYMBOLS = ["◆", "▲", "●", "■", "★", "♦", "✦", "⬟"];
 const ALL_CARDS = [...SYMBOLS, ...SYMBOLS];
@@ -139,15 +140,21 @@ export default function MemoryPage() {
         </div>
 
         {/* Win overlay */}
-        {won && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 rounded-2xl" style={{ background: "rgba(0,0,0,0.8)", backdropFilter: "blur(4px)" }}>
-            <p style={{ color: "white", fontFamily: "monospace", fontSize: 22, fontWeight: 700 }}>CLEAR!</p>
-            <p style={{ color: "rgba(255,255,255,0.5)", fontFamily: "monospace", fontSize: 13 }}>{moves} moves · {elapsed}s</p>
-            <button onClick={restart} className="flex items-center gap-2 px-5 py-2 rounded-full text-sm hover:opacity-80 transition-opacity" style={{ border: "1px solid rgba(255,255,255,0.3)", color: "white", fontFamily: "monospace", background: "transparent" }}>
-              <RotateCcw size={14} /> main lagi
-            </button>
-          </div>
-        )}
+        {won && (() => {
+          const finalScore = Math.max(10, 1000 - (elapsed * 5) - (moves * 2));
+          return (
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 rounded-2xl z-10 pointer-events-auto" style={{ background: "rgba(0,0,0,0.8)", backdropFilter: "blur(4px)" }}>
+              <p style={{ color: "white", fontFamily: "monospace", fontSize: 22, fontWeight: 700 }}>CLEAR!</p>
+              <p style={{ color: "rgba(255,255,255,0.5)", fontFamily: "monospace", fontSize: 13 }}>{moves} moves · {elapsed}s</p>
+              
+              <ScoreSubmit game="memory" score={finalScore} onSubmitted={() => {}} />
+
+              <button onClick={restart} className="mt-2 flex items-center gap-2 px-5 py-2 rounded-full text-sm hover:opacity-80 transition-opacity" style={{ border: "1px solid rgba(255,255,255,0.3)", color: "white", fontFamily: "monospace", background: "transparent" }}>
+                <RotateCcw size={14} /> main lagi
+              </button>
+            </div>
+          );
+        })()}
       </div>
 
       <button onClick={restart} className="mt-5 flex items-center gap-2 text-xs hover:opacity-60 transition-opacity" style={{ color: "rgba(255,255,255,0.3)", fontFamily: "monospace", background: "none", border: "none", cursor: "pointer" }}>

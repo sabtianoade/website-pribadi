@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import ScoreSubmit from "@/components/ScoreSubmit";
 
 const HOLE_COUNT = 9;
 const GAME_DURATION = 30; // 30 seconds
@@ -40,6 +41,7 @@ export default function WhackAGorilla() {
   const [activeHole, setActiveHole] = useState<number | null>(null);
   const [whackedHole, setWhackedHole] = useState<number | null>(null);
   const [highScore, setHighScore] = useState(0);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
 
   const gameTimerRef = useRef<NodeJS.Timeout | null>(null);
   const popTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -55,6 +57,7 @@ export default function WhackAGorilla() {
     setScore(0);
     setTimeLeft(GAME_DURATION);
     setWhackedHole(null);
+    setHasSubmitted(false);
     popRandomGorilla();
 
     // Main game timer
@@ -200,15 +203,32 @@ export default function WhackAGorilla() {
 
         {/* Overlay when not playing */}
         {!isPlaying && (
-          <div className="mt-10">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={startGame}
-              className="px-8 py-4 bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] text-white font-black text-xl rounded-2xl shadow-xl uppercase tracking-widest border-2 border-white/20"
-            >
-              {timeLeft === 0 ? "Main Lagi" : "Mulai Game"}
-            </motion.button>
+          <div className="mt-10 flex flex-col items-center">
+            {timeLeft === 0 && score > 0 && !hasSubmitted && (
+              <div className="mb-6 w-full">
+                <ScoreSubmit game="whack" score={score} onSubmitted={() => setHasSubmitted(true)} />
+              </div>
+            )}
+            
+            {(timeLeft > 0 || score === 0 || hasSubmitted) && (
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={startGame}
+                className="px-8 py-4 bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] text-white font-black text-xl rounded-2xl shadow-xl uppercase tracking-widest border-2 border-white/20"
+              >
+                {timeLeft === 0 ? "Main Lagi" : "Mulai Game"}
+              </motion.button>
+            )}
+
+            {timeLeft === 0 && score > 0 && !hasSubmitted && (
+              <button 
+                onClick={startGame}
+                className="mt-4 text-sm text-[var(--muted)] hover:text-[var(--foreground)] transition-colors underline"
+              >
+                Lewati & Main Lagi
+              </button>
+            )}
           </div>
         )}
       </div>

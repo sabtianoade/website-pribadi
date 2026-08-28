@@ -9,26 +9,33 @@ import { supabase } from "@/lib/supabase";
 
 export default function About() {
   const [aboutImage, setAboutImage] = useState("/upd.jpeg");
+  const [aboutDescription, setAboutDescription] = useState("Aku adalah seorang pelajar SMK jurusan Rekayasa Perangkat Lunak. Selain koding, aku suka mendengarkan musik, bermain game, dan mengeksplorasi desain web yang unik.");
 
   useEffect(() => {
-    async function fetchAboutImage() {
+    async function fetchAboutData() {
       try {
-        const { data } = await supabase
+        const { data: imgData } = await supabase
           .from("gallery")
           .select("image_url")
           .eq("category", "about")
           .order("created_at", { ascending: false })
           .limit(1);
           
-        if (data && data.length > 0) {
-          setAboutImage(data[0].image_url);
+        if (imgData && imgData.length > 0) {
+          setAboutImage(imgData[0].image_url);
+        }
+
+        const { data: textData } = await supabase.from("site_settings").select("*");
+        if (textData) {
+          const desc = textData.find(item => item.id === "about_description")?.value;
+          if (desc) setAboutDescription(desc);
         }
       } catch (err) {
-        console.error("Error fetching about image:", err);
+        console.error("Error fetching about data:", err);
       }
     }
     
-    fetchAboutImage();
+    fetchAboutData();
   }, []);
 
   return (
@@ -74,36 +81,16 @@ export default function About() {
 
             {/* Story paragraphs */}
             <div className="flex flex-col gap-4">
-              {[
-                {
-                  delay: 0.2,
-                  text: "Halo, salam kenal! Nama panjang gw Muhammad Thomas Ade Andra Sabtiano — panggil Thomas aja, panjang bener soalnya tu nama wkwk. Gw lahir di Pasuruan tanggal 3 Mei 2008, dan gw hobi banget sama badminton.",
-                },
-                {
-                  delay: 0.3,
-                  text: "Ada satu kejadian yang gabakal bisa aku lupain karena emang bener-bener itu kenangan banget — tapi gw gabisa cerita di sini karena bakal panjang banget. Mungkin kasih segelas americano bakal gw ceritain wkwk.",
-                },
-                {
-                  delay: 0.4,
-                  text: "Btw kalian suka ngopi kagak? Cobain kopi buatan gw di Woelandari, bakal nagih dah — bikinnya juga dari hati wkwk. Gw bikin web ini karena gabut dan bingung mau ngarsipin momen-momen di mana lagi, dan seru juga ternyata bikin ginian. Makasih banyak udah mampir ke sini, have fun ya — sorry gw banyak omong wkwk 🙏",
-                },
-                {
-                  delay: 0.5,
-                  text: "Btw tau ga kalian kenapa gw pilih mono gini tema warnanya? Karena emang gw suka hitam putih sih wkwk. Ayo warnain dongg — tapi jangan dengan pelangi basa-basi mu itu ya wkwk 😏",
-                },
-              ].map((p, i) => (
-                <motion.p
-                  key={i}
-                  initial={{ opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.2 }}
-                  transition={{ duration: 0.5, delay: p.delay }}
-                  className="text-base leading-relaxed"
-                  style={{ color: "var(--muted)" }}
-                >
-                  {p.text}
-                </motion.p>
-              ))}
+              <motion.p
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="text-base leading-relaxed whitespace-pre-wrap"
+                style={{ color: "var(--muted)" }}
+              >
+                {aboutDescription}
+              </motion.p>
             </div>
 
             {/* Quick stats */}

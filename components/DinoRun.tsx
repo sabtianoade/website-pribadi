@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion } from "motion/react";
+import ScoreSubmit from "@/components/ScoreSubmit";
 
 // The Pixel Art Dino (from our loading screen / decoration)
 const DinoSvg = ({ isDead }: { isDead?: boolean }) => (
@@ -37,6 +38,7 @@ export default function DinoRun() {
   const [isGameOver, setIsGameOver] = useState(false);
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
 
   // Game State Refs (to avoid re-renders during 60fps loop)
   const isPlayingRef = useRef(false);
@@ -65,6 +67,7 @@ export default function DinoRun() {
   const startGame = () => {
     setIsPlaying(true);
     setIsGameOver(false);
+    setHasSubmitted(false);
     isPlayingRef.current = true;
     setScore(0);
     scoreRef.current = 0;
@@ -82,6 +85,7 @@ export default function DinoRun() {
     setIsGameOver(true);
     isPlayingRef.current = false;
     cancelAnimationFrame(frameRef.current);
+    setScore(Math.floor(scoreRef.current));
     
     if (scoreRef.current > highScore) {
       setHighScore(Math.floor(scoreRef.current));
@@ -148,7 +152,7 @@ export default function DinoRun() {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.code === 'Space' || e.code === 'ArrowUp') {
         e.preventDefault();
-        jump();
+        if (isPlayingRef.current) jump();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -160,12 +164,14 @@ export default function DinoRun() {
   }, []);
 
   return (
-    <div className="w-full max-w-3xl mx-auto flex flex-col items-center">
+    <div className="w-full max-w-3xl mx-auto flex flex-col items-center gap-6">
       
       {/* Game Screen */}
       <div 
         className="relative w-full h-[300px] bg-[#111] border-4 border-[#333] rounded-3xl overflow-hidden cursor-pointer shadow-2xl select-none"
-        onPointerDown={jump}
+        onPointerDown={(e) => {
+          if (isPlayingRef.current) jump();
+        }}
       >
         {/* Score Board */}
         <div className="absolute top-4 right-6 flex gap-8 z-20 text-white/50 font-mono text-xl font-bold">
@@ -206,7 +212,7 @@ export default function DinoRun() {
           <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-30">
             <button 
               onClick={(e) => { e.stopPropagation(); startGame(); }}
-              className="px-8 py-3 bg-primary text-primary-foreground font-black uppercase tracking-widest rounded-xl hover:scale-105 transition-transform"
+              className="px-8 py-3 bg-[var(--primary)] text-white font-black uppercase tracking-widest rounded-xl hover:scale-105 transition-transform"
             >
               Mulai Game
             </button>
@@ -214,19 +220,35 @@ export default function DinoRun() {
         )}
 
         {isGameOver && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-red-900/40 backdrop-blur-sm z-30">
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-red-900/40 backdrop-blur-sm z-30 pointer-events-auto cursor-default">
             <h2 className="text-4xl font-black text-white mb-2 uppercase tracking-widest drop-shadow-lg">Game Over</h2>
-            <button 
-              onClick={(e) => { e.stopPropagation(); startGame(); }}
-              className="mt-4 px-6 py-2 bg-white text-black font-bold uppercase rounded-lg hover:scale-105 transition-transform"
-            >
-              Coba Lagi
-            </button>
+            {!hasSubmitted ? (
+              <ScoreSubmit 
+                game="dino" 
+                score={score} 
+                onSubmitted={() => setHasSubmitted(true)} 
+              />
+            ) : (
+              <button 
+                onClick={(e) => { e.stopPropagation(); startGame(); }}
+                className="mt-4 px-6 py-3 bg-white text-black font-bold uppercase rounded-lg hover:scale-105 transition-transform"
+              >
+                Coba Lagi
+              </button>
+            )}
+            {!hasSubmitted && (
+              <button 
+                onClick={(e) => { e.stopPropagation(); startGame(); }}
+                className="mt-4 text-xs text-white/50 hover:text-white underline"
+              >
+                Lewati & Coba Lagi
+              </button>
+            )}
           </div>
         )}
       </div>
 
-      <div className="mt-4 text-sm text-[var(--muted)] font-medium uppercase tracking-widest text-center">
+      <div className="text-sm text-[var(--muted)] font-medium uppercase tracking-widest text-center">
         Tekan <kbd className="px-2 py-1 bg-[#222] rounded mx-1 text-white border border-[#444]">SPASI</kbd> atau <kbd className="px-2 py-1 bg-[#222] rounded mx-1 text-white border border-[#444]">TAP</kbd> layar untuk melompat
       </div>
     </div>
