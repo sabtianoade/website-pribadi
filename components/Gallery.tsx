@@ -29,7 +29,7 @@ export default function Gallery() {
         const { data, error } = await supabase
           .from("gallery")
           .select("*")
-          .neq("category", "netha")
+          .not("category", "like", "netha%")
           .order("created_at", { ascending: false });
 
         if (error) throw error;
