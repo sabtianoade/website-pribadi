@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import Image from "next/image";
 import { X } from "lucide-react";
-import { galleryItems, galleryCategories, type GalleryItem } from "@/data/gallery";
+import { galleryCategories, type GalleryItem } from "@/data/gallery";
 import GlossyCard from "@/components/GlossyCard";
+import { supabase } from "@/lib/supabase";
 
 const categoryLabels: Record<string, string> = {
   all: "Semua",
@@ -19,6 +20,48 @@ const categoryLabels: Record<string, string> = {
 export default function Gallery() {
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [lightboxItem, setLightboxItem] = useState<GalleryItem | null>(null);
+  const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchGallery() {
+      try {
+        const { data, error } = await supabase
+          .from("gallery")
+          .select("*")
+          .neq("category", "netha")
+          .order("created_at", { ascending: false });
+
+        if (error) throw error;
+        
+        // Map database schema to GalleryItem format
+        const items: GalleryItem[] = (data || []).map((dbItem, index) => {
+          // Assign random widths for masonry grid effect if needed
+          const widths: ("normal" | "wide" | "tall")[] = ["normal", "wide", "tall"];
+          const width = widths[index % 3]; 
+
+          return {
+            id: dbItem.id,
+            src: dbItem.image_url,
+            alt: dbItem.title,
+            altId: dbItem.title,
+            caption: dbItem.title,
+            captionId: dbItem.title,
+            category: dbItem.category as any,
+            width: width,
+          };
+        });
+
+        setGalleryItems(items);
+      } catch (error) {
+        console.error("Error fetching gallery:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    
+    fetchGallery();
+  }, []);
 
   const filtered =
     activeCategory === "all"
@@ -64,51 +107,61 @@ export default function Gallery() {
           ))}
         </div>
 
-        {/* Masonry grid */}
-        <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
-          <AnimatePresence>
-            {filtered.map((item) => (
-              <motion.div
-                key={item.id}
-                layout
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.35 }}
-                className="break-inside-avoid group relative overflow-hidden rounded-2xl cursor-pointer"
-                style={{ border: "1px solid var(--card-border)" }}
-                onClick={() => setLightboxItem(item)}
-                onKeyDown={(e) => e.key === "Enter" && setLightboxItem(item)}
-                tabIndex={0}
-                role="button"
-                aria-label={`Lihat foto: ${item.captionId ?? item.caption}`}
-              >
-                <GlossyCard
-                  className={`w-full ${
-                    item.width === "tall" ? "aspect-[3/4]" : item.width === "wide" ? "aspect-[4/3]" : "aspect-square"
-                  }`}
+        {loading ? (
+          <div className="flex justify-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2" style={{ borderColor: "var(--primary)" }}></div>
+          </div>
+        ) : filtered.length === 0 ? (
+          <div className="text-center py-20" style={{ color: "var(--muted)" }}>
+            <p>Belum ada foto untuk kategori ini.</p>
+          </div>
+        ) : (
+          /* Masonry grid */
+          <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
+            <AnimatePresence>
+              {filtered.map((item) => (
+                <motion.div
+                  key={item.id}
+                  layout
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.35 }}
+                  className="break-inside-avoid group relative overflow-hidden rounded-2xl cursor-pointer"
+                  style={{ border: "1px solid var(--card-border)" }}
+                  onClick={() => setLightboxItem(item)}
+                  onKeyDown={(e) => e.key === "Enter" && setLightboxItem(item)}
+                  tabIndex={0}
+                  role="button"
+                  aria-label={`Lihat foto: ${item.captionId ?? item.caption}`}
                 >
-                  <Image
-                    src={item.src}
-                    alt={item.altId ?? item.alt}
-                    fill
-                    quality={100}
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  />
-                  <div
-                    className="absolute inset-0 flex items-end opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                    style={{ background: "linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 60%)" }}
+                  <GlossyCard
+                    className={`w-full ${
+                      item.width === "tall" ? "aspect-[3/4]" : item.width === "wide" ? "aspect-[4/3]" : "aspect-square"
+                    }`}
                   >
-                    <p className="px-4 py-3 text-white text-sm font-medium">
-                      {item.captionId ?? item.caption}
-                    </p>
-                  </div>
-                </GlossyCard>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </div>
+                    <Image
+                      src={item.src}
+                      alt={item.altId ?? item.alt}
+                      fill
+                      quality={100}
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    />
+                    <div
+                      className="absolute inset-0 flex items-end opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                      style={{ background: "linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 60%)" }}
+                    >
+                      <p className="px-4 py-3 text-white text-sm font-medium">
+                        {item.captionId ?? item.caption}
+                      </p>
+                    </div>
+                  </GlossyCard>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </div>
+        )}
       </div>
 
       {/* Lightbox */}

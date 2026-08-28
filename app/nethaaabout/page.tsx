@@ -9,11 +9,9 @@ import confetti from "canvas-confetti";
 import { useState, useRef, useEffect } from "react";
 import FallingParticles from "@/components/FallingParticles";
 
-const photos = [
-  { src: "/momen-netha-1.jpeg", alt: "Netha 1", rotate: -4 },
-  { src: "/momen-netha-2.jpeg", alt: "Netha 2", rotate: 2 },
-  { src: "", alt: "coming soon", rotate: -2, isComingSoon: true },
-];
+import { supabase } from "@/lib/supabase";
+
+// Removed hardcoded photos array, fetching dynamically instead
 
 const drinks = [
   { name: "Matcha Latte", desc: "meski ini 10x kayanya gabakal muak deh", img: "/matcha.jpeg" },
@@ -33,6 +31,41 @@ export default function AyangPage() {
   const [isError, setIsError] = useState(false);
   const [fireworksFired, setFireworksFired] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const [photos, setPhotos] = useState<Array<{ src: string, alt: string, rotate: number, isComingSoon?: boolean }>>([]);
+
+  // Fetch Netha photos from Supabase
+  useEffect(() => {
+    async function fetchNethaPhotos() {
+      try {
+        const { data, error } = await supabase
+          .from("gallery")
+          .select("*")
+          .eq("category", "netha")
+          .order("created_at", { ascending: false });
+
+        if (error) throw error;
+
+        const fetchedPhotos: Array<{ src: string, alt: string, rotate: number, isComingSoon?: boolean }> = (data || []).map((dbItem, index) => {
+          // Assign random rotation for tilt effect
+          const rotations = [-4, 2, -2, 4, -3, 3];
+          const rotate = rotations[index % rotations.length];
+          return {
+            src: dbItem.image_url,
+            alt: dbItem.title,
+            rotate: rotate
+          };
+        });
+        
+        // Add "coming soon" at the end if you want
+        fetchedPhotos.push({ src: "", alt: "coming soon", rotate: -2, isComingSoon: true });
+
+        setPhotos(fetchedPhotos);
+      } catch (err) {
+        console.error("Error fetching netha photos:", err);
+      }
+    }
+    fetchNethaPhotos();
+  }, []);
 
   // Scroll animations for video background reveal
   const { scrollYProgress } = useScroll();
