@@ -20,7 +20,7 @@ export const skills: Skill[] = [
     level: "99", 
     maxLevel: "99", 
     description: "Fondasi dari segala web. Mengatur elemen dan semantik halaman web tanpa cela.",
-    color: "#E34F26", 
+    color: "var(--foreground)", 
     emoji: "🧱" 
   },
   { 
@@ -30,7 +30,7 @@ export const skills: Skill[] = [
     level: "95", 
     maxLevel: "99", 
     description: "Seni dalam kode. Digunakan untuk membuat web responsif, transisi mulus, dan desain premium.",
-    color: "#1572B6", 
+    color: "var(--foreground)", 
     emoji: "🎨" 
   },
   { 
@@ -40,7 +40,7 @@ export const skills: Skill[] = [
     level: "90", 
     maxLevel: "99", 
     description: "Senjata andalan untuk styling super cepat berbasis utility. Membuat desain glassmorphism jadi mudah.",
-    color: "#38B2AC", 
+    color: "var(--foreground)", 
     emoji: "🌊" 
   },
 
@@ -52,7 +52,7 @@ export const skills: Skill[] = [
     level: "92", 
     maxLevel: "99", 
     description: "Otak dari semua interaksi. Mengatur state, fetch API, dan logic minigames yang ada di website ini.",
-    color: "#F7DF1E", 
+    color: "var(--foreground)", 
     emoji: "⚡" 
   },
   { 
@@ -62,7 +62,7 @@ export const skills: Skill[] = [
     level: "88", 
     maxLevel: "99", 
     description: "Library UI utama. Komponen modular, state management, dan hooks yang kuat.",
-    color: "#61DAFB", 
+    color: "var(--foreground)", 
     emoji: "⚛️" 
   },
   { 
@@ -72,7 +72,7 @@ export const skills: Skill[] = [
     level: "85", 
     maxLevel: "99", 
     description: "Framework impian untuk SSR/SSG. Mempercepat performa web dan routing yang sangat mudah.",
-    color: "#000000", 
+    color: "var(--foreground)", 
     emoji: "▲" 
   },
 
@@ -84,7 +84,7 @@ export const skills: Skill[] = [
     level: "80", 
     maxLevel: "99", 
     description: "Kanvas utama sebelum menulis kode. Digunakan untuk wireframing, prototyping, dan eksplorasi desain.",
-    color: "#F24E1E", 
+    color: "var(--foreground)", 
     emoji: "🎯" 
   },
   { 
@@ -94,7 +94,7 @@ export const skills: Skill[] = [
     level: "75", 
     maxLevel: "99", 
     description: "Pemahaman tentang user journey, hierarki visual, dan prinsip desain untuk membuat aplikasi yang nyaman.",
-    color: "#FF3366", 
+    color: "var(--foreground)", 
     emoji: "✨" 
   },
   { 
@@ -104,7 +104,7 @@ export const skills: Skill[] = [
     level: "70", 
     maxLevel: "99", 
     description: "Library untuk animasi React yang sangat smooth. Membuat transisi halaman dan interaksi jadi terasa hidup.",
-    color: "#0055FF", 
+    color: "var(--foreground)", 
     emoji: "🎬" 
   },
 ];

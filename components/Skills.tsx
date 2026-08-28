@@ -25,9 +25,9 @@ export default function Skills() {
   const visionSkills = skills.filter((s) => s.category === "vision");
 
   const categories = [
-    { id: "structure", title: "Path of Structure", icon: Shield, data: structureSkills, color: "text-blue-500", glow: "shadow-blue-500/20" },
-    { id: "logic", title: "Path of Logic", icon: Sword, data: logicSkills, color: "text-amber-500", glow: "shadow-amber-500/20" },
-    { id: "vision", title: "Path of Vision", icon: Eye, data: visionSkills, color: "text-purple-500", glow: "shadow-purple-500/20" },
+    { id: "structure", title: "Path of Structure", icon: Shield, data: structureSkills, color: "text-[var(--foreground)]", glow: "shadow-[var(--foreground)]/10" },
+    { id: "logic", title: "Path of Logic", icon: Sword, data: logicSkills, color: "text-[var(--foreground)]", glow: "shadow-[var(--foreground)]/10" },
+    { id: "vision", title: "Path of Vision", icon: Eye, data: visionSkills, color: "text-[var(--foreground)]", glow: "shadow-[var(--foreground)]/10" },
   ];
 
   return (
