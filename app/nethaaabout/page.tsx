@@ -13,7 +13,7 @@ import { supabase } from "@/lib/supabase";
 
 // Removed hardcoded photos array, fetching dynamically instead
 
-const drinks = [
+const defaultDrinks = [
   { name: "Matcha Latte", desc: "meski ini 10x kayanya gabakal muak deh", img: "/matcha.jpeg" },
 ];
 
@@ -32,6 +32,9 @@ export default function AyangPage() {
   const [fireworksFired, setFireworksFired] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
   const [photos, setPhotos] = useState<Array<{ src: string, alt: string, rotate: number, isComingSoon?: boolean }>>([]);
+  const [nethaHero, setNethaHero] = useState("/profil-netha.jpeg");
+  const [nethaFotbar, setNethaFotbar] = useState(["/fotbar-1.jpeg", "/fotbar-2.jpeg", "/fotbar-3.jpeg"]);
+  const [nethaDrinks, setNethaDrinks] = useState(defaultDrinks);
 
   // Fetch Netha photos from Supabase
   useEffect(() => {
@@ -60,6 +63,33 @@ export default function AyangPage() {
         fetchedPhotos.push({ src: "", alt: "coming soon", rotate: -2, isComingSoon: true });
 
         setPhotos(fetchedPhotos);
+
+        // Fetch netha_hero
+        const { data: heroData } = await supabase.from("gallery").select("image_url").eq("category", "netha_hero").order("created_at", { ascending: false }).limit(1);
+        if (heroData && heroData.length > 0) setNethaHero(heroData[0].image_url);
+
+        // Fetch netha_fotbar
+        const { data: fotbarData } = await supabase.from("gallery").select("image_url").eq("category", "netha_fotbar").order("created_at", { ascending: true }).limit(3);
+        if (fotbarData && fotbarData.length > 0) {
+          setNethaFotbar(prev => {
+            const newFotbar = [...prev];
+            for (let i = 0; i < fotbarData.length; i++) {
+              newFotbar[i] = fotbarData[i].image_url;
+            }
+            return newFotbar;
+          });
+        }
+
+        // Fetch netha_drinks
+        const { data: drinksData } = await supabase.from("gallery").select("image_url, title").eq("category", "netha_drinks").order("created_at", { ascending: false }).limit(1);
+        if (drinksData && drinksData.length > 0) {
+          setNethaDrinks(prev => {
+            const newDrinks = [...prev];
+            newDrinks[0] = { ...newDrinks[0], img: drinksData[0].image_url, name: drinksData[0].title || newDrinks[0].name };
+            return newDrinks;
+          });
+        }
+
       } catch (err) {
         console.error("Error fetching netha photos:", err);
       }
@@ -239,7 +269,7 @@ export default function AyangPage() {
             className="relative inline-block w-24 h-24 md:w-32 md:h-32 rounded-full mb-6 mx-auto border-4 border-[var(--primary)] shadow-[0_0_30px_var(--primary-glow)] overflow-hidden"
           >
             <Image 
-              src="/profil-netha.jpeg"
+              src={nethaHero}
               alt="Profil Netha"
               fill
               className="object-cover"
@@ -260,7 +290,7 @@ export default function AyangPage() {
           </div>
           
           <div className="relative flex justify-center items-center h-[350px] md:h-[550px] mt-10">
-            {["/fotbar-1.jpeg", "/fotbar-2.jpeg", "/fotbar-3.jpeg"].map((src, i) => (
+            {nethaFotbar.map((src, i) => (
               <motion.div
                 key={i}
                 tabIndex={0}
@@ -346,7 +376,7 @@ export default function AyangPage() {
           </div>
 
           <div className="flex justify-center max-w-2xl mx-auto px-4">
-            {drinks.map((drink, i) => (
+            {nethaDrinks.map((drink, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, scale: 0.95, y: 20 }}

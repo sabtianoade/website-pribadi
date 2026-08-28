@@ -1,8 +1,10 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import Image from "next/image";
 import { hobbies } from "@/data/hobbies";
+import { supabase } from "@/lib/supabase";
 
 // Bento layout config: defines position and size of each card
 const bentoConfig = [
@@ -15,6 +17,36 @@ const bentoConfig = [
 ];
 
 export default function Hobbies() {
+  const [hobbyImages, setHobbyImages] = useState<string[]>([
+    "/badmin.jpeg", "/musik.jpeg", "/padel.jpeg", "/gitar.jpeg", "/bikinkopi.jpeg", "/coding.jpeg"
+  ]);
+
+  useEffect(() => {
+    async function fetchHobbyImages() {
+      try {
+        const { data } = await supabase
+          .from("gallery")
+          .select("image_url")
+          .eq("category", "hobbies")
+          .order("created_at", { ascending: true }) // Oldest first to match original order (badmin, musik, etc)
+          .limit(6);
+          
+        if (data && data.length > 0) {
+          // If we got exactly 6, use them. If less, fill the rest with fallback.
+          const newImages = [...hobbyImages];
+          for (let i = 0; i < data.length; i++) {
+            newImages[i] = data[i].image_url;
+          }
+          setHobbyImages(newImages);
+        }
+      } catch (err) {
+        console.error("Error fetching hobby images:", err);
+      }
+    }
+    
+    fetchHobbyImages();
+  }, []);
+
   return (
     <section
       id="hobbies"
@@ -65,7 +97,7 @@ export default function Hobbies() {
                 {i === 0 && (
                   <div className="absolute inset-0 overflow-hidden rounded-[2rem]" aria-hidden="true">
                     <Image
-                      src="/badmin.jpeg"
+                      src={hobbyImages[0]}
                       alt=""
                       fill
                       className="object-cover object-center"
@@ -79,7 +111,7 @@ export default function Hobbies() {
                 {i === 1 && (
                   <div className="absolute inset-0 overflow-hidden rounded-[2rem]" aria-hidden="true">
                     <Image
-                      src="/musik.jpeg"
+                      src={hobbyImages[1]}
                       alt=""
                       fill
                       className="object-cover object-center"
@@ -93,7 +125,7 @@ export default function Hobbies() {
                 {i === 2 && (
                   <div className="absolute inset-0 overflow-hidden rounded-[2rem]" aria-hidden="true">
                     <Image
-                      src="/padel.jpeg"
+                      src={hobbyImages[2]}
                       alt=""
                       fill
                       className="object-cover object-center"
@@ -107,7 +139,7 @@ export default function Hobbies() {
                 {i === 3 && (
                   <div className="absolute inset-0 overflow-hidden rounded-[2rem]" aria-hidden="true">
                     <Image
-                      src="/gitar.jpeg"
+                      src={hobbyImages[3]}
                       alt=""
                       fill
                       className="object-cover object-center"
@@ -121,7 +153,7 @@ export default function Hobbies() {
                 {i === 4 && (
                   <div className="absolute inset-0 overflow-hidden rounded-[2rem]" aria-hidden="true">
                     <Image
-                      src="/bikinkopi.jpeg"
+                      src={hobbyImages[4]}
                       alt=""
                       fill
                       className="object-cover object-center"
@@ -135,7 +167,7 @@ export default function Hobbies() {
                 {i === 5 && (
                   <div className="absolute inset-0 overflow-hidden rounded-[2rem]" aria-hidden="true">
                     <Image
-                      src="/coding.jpeg"
+                      src={hobbyImages[5]}
                       alt=""
                       fill
                       className="object-cover object-center"

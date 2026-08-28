@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { supabase } from "@/lib/supabase";
-import { LogOut, Upload, Trash2, Image as ImageIcon, Loader2 } from "lucide-react";
+import { LogOut, Upload, Trash2, Image as ImageIcon, Loader2, Search, Filter } from "lucide-react";
 import { logoutAction } from "./actions";
 
 type GalleryItem = {
@@ -22,7 +22,17 @@ export default function AdminDashboard() {
 
   // Form State
   const [title, setTitle] = useState("");
-  const [category, setCategory] = useState("general"); // 'general' or 'netha'
+  const [category, setCategory] = useState("general"); 
+
+  // Filter & Search State
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterCategory, setFilterCategory] = useState("all");
+
+  const filteredItems = items.filter(item => {
+    const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = filterCategory === "all" || item.category === filterCategory;
+    return matchesSearch && matchesCategory;
+  });
 
   useEffect(() => {
     fetchGallery();
@@ -158,8 +168,21 @@ export default function AdminDashboard() {
                     onChange={(e) => setCategory(e.target.value)}
                     className="w-full bg-[var(--background)] border border-[var(--card-border)] rounded-lg px-4 py-2 text-sm outline-none focus:border-[var(--primary)]"
                   >
-                    <option value="general">Momen Umum (Beranda)</option>
-                    <option value="netha">Momen Netha (Halaman Rahasia)</option>
+                    <optgroup label="Beranda">
+                      <option value="general">Momen Umum / Galeri</option>
+                      <option value="hero">Hero Background (1 Foto)</option>
+                      <option value="hero_avatar">Hero Avatar (1 Foto)</option>
+                      <option value="about">Tentang Aku Profile (1 Foto)</option>
+                      <option value="hobbies">Hal yang Aku Suka (Bento 6 Foto)</option>
+                      <option value="interactive_desk">Meja Interaktif (4 Foto)</option>
+                      <option value="favorites">Yang Aku Suka Banget (4 Foto)</option>
+                    </optgroup>
+                    <optgroup label="Halaman Rahasia Netha">
+                      <option value="netha">Momen Netha (Galeri Banyak Foto)</option>
+                      <option value="netha_hero">Netha Profile (1 Foto)</option>
+                      <option value="netha_fotbar">You & Me Fotbar (3 Foto)</option>
+                      <option value="netha_drinks">Minuman Favoritnya (1 Foto)</option>
+                    </optgroup>
                   </select>
                 </div>
 
@@ -190,25 +213,62 @@ export default function AdminDashboard() {
 
           {/* GALLERY GRID */}
           <div className="lg:col-span-2">
-            <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
-              <ImageIcon size={20} className="text-[var(--primary)]" />
-              Galeri Tersimpan
-            </h2>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+              <h2 className="text-lg font-bold flex items-center gap-2">
+                <ImageIcon size={20} className="text-[var(--primary)]" />
+                Galeri Tersimpan
+              </h2>
+              
+              <div className="flex items-center gap-2">
+                <div className="relative">
+                  <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--muted)]" />
+                  <input 
+                    type="text" 
+                    placeholder="Cari foto..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-9 pr-4 py-2 bg-[var(--card)] border border-[var(--card-border)] rounded-lg text-sm w-full sm:w-48 outline-none focus:border-[var(--primary)]"
+                  />
+                </div>
+                
+                <div className="relative">
+                  <Filter size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--muted)]" />
+                  <select
+                    value={filterCategory}
+                    onChange={(e) => setFilterCategory(e.target.value)}
+                    className="pl-9 pr-8 py-2 bg-[var(--card)] border border-[var(--card-border)] rounded-lg text-sm appearance-none outline-none focus:border-[var(--primary)]"
+                  >
+                    <option value="all">Semua Kategori</option>
+                    <option value="general">Momen Umum</option>
+                    <option value="hero">Hero Background</option>
+                    <option value="hero_avatar">Hero Avatar</option>
+                    <option value="about">Tentang Aku</option>
+                    <option value="hobbies">Hobbies Bento</option>
+                    <option value="interactive_desk">Meja Interaktif</option>
+                    <option value="favorites">Favorites</option>
+                    <option value="netha">Netha Galeri</option>
+                    <option value="netha_hero">Netha Profile</option>
+                    <option value="netha_fotbar">Netha Fotbar</option>
+                    <option value="netha_drinks">Netha Drinks</option>
+                  </select>
+                </div>
+              </div>
+            </div>
 
             {loading ? (
               <div className="flex items-center justify-center h-64">
                 <Loader2 className="w-8 h-8 animate-spin text-[var(--primary)]" />
               </div>
-            ) : items.length === 0 ? (
+            ) : filteredItems.length === 0 ? (
               <div className="bg-[var(--card)] border border-[var(--card-border)] border-dashed rounded-2xl h-64 flex flex-col items-center justify-center text-[var(--muted)]">
                 <ImageIcon size={48} className="opacity-20 mb-4" />
-                <p>Belum ada foto yang di-upload</p>
+                <p>Tidak ada foto yang cocok dengan pencarian.</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {items.map((item) => (
-                  <div key={item.id} className="bg-[var(--card)] border border-[var(--card-border)] rounded-xl overflow-hidden group">
-                    <div className="relative aspect-video w-full overflow-hidden bg-black/10">
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                {filteredItems.map((item) => (
+                  <div key={item.id} className="bg-[var(--card)] border border-[var(--card-border)] rounded-xl overflow-hidden group flex flex-col">
+                    <div className="relative aspect-[4/3] w-full overflow-hidden bg-black/10">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img 
                         src={item.image_url} 
@@ -226,9 +286,9 @@ export default function AdminDashboard() {
                         <Trash2 size={14} />
                       </button>
                     </div>
-                    <div className="p-4">
-                      <p className="font-semibold text-sm truncate">{item.title}</p>
-                      <p className="text-[10px] text-[var(--muted)] mt-1">
+                    <div className="p-4 flex flex-col flex-1">
+                      <p className="font-semibold text-sm line-clamp-2" title={item.title}>{item.title}</p>
+                      <p className="text-[10px] text-[var(--muted)] mt-auto pt-2">
                         {new Date(item.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
                       </p>
                     </div>

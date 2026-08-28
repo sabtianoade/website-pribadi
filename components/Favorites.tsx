@@ -1,11 +1,44 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import Image from "next/image";
 import { favorites } from "@/data/favorites";
 import GlossyCard from "@/components/GlossyCard";
+import { supabase } from "@/lib/supabase";
 
 export default function Favorites() {
+  const [favImages, setFavImages] = useState<string[]>([
+    "/new-momen1.jpg", "/minuman-fav.jpg", "/makanan-fav2.jpg", "/makanan-fav3.jpg"
+  ]);
+
+  useEffect(() => {
+    async function fetchFavImages() {
+      try {
+        const { data } = await supabase
+          .from("gallery")
+          .select("image_url")
+          .eq("category", "favorites")
+          .order("created_at", { ascending: true }) // movie, kopi, makanan2, makanan3
+          .limit(4);
+          
+        if (data && data.length > 0) {
+          setFavImages(prev => {
+            const newImages = [...prev];
+            for (let i = 0; i < data.length; i++) {
+              newImages[i] = data[i].image_url;
+            }
+            return newImages;
+          });
+        }
+      } catch (err) {
+        console.error("Error fetching fav images:", err);
+      }
+    }
+    
+    fetchFavImages();
+  }, []);
+
   return (
     <section id="favorites" className="py-24 px-6 md:px-10" style={{ background: "var(--muted-bg)" }}>
       <div style={{ maxWidth: 1100, margin: "0 auto" }}>
@@ -49,7 +82,7 @@ export default function Favorites() {
                 }`}
               >
                 <Image
-                  src={item.imageSrc || `https://picsum.photos/seed/fav-${item.id}-${item.imageSeed}/600/400`}
+                  src={favImages[i]}
                   alt={`Gambar representasi ${item.title} — ${item.category}`}
                   fill
                   className="object-cover transition-transform duration-500 group-hover:scale-105"

@@ -2,10 +2,35 @@
 
 import { motion } from "motion/react";
 import Image from "next/image";
+import { useState, useEffect } from "react";
 import { MapPin, GraduationCap, Heart, Sparkles } from "lucide-react";
 import TiltCard from "@/components/TiltCard";
+import { supabase } from "@/lib/supabase";
 
 export default function About() {
+  const [aboutImage, setAboutImage] = useState("/upd.jpeg");
+
+  useEffect(() => {
+    async function fetchAboutImage() {
+      try {
+        const { data } = await supabase
+          .from("gallery")
+          .select("image_url")
+          .eq("category", "about")
+          .order("created_at", { ascending: false })
+          .limit(1);
+          
+        if (data && data.length > 0) {
+          setAboutImage(data[0].image_url);
+        }
+      } catch (err) {
+        console.error("Error fetching about image:", err);
+      }
+    }
+    
+    fetchAboutImage();
+  }, []);
+
   return (
     <section
       id="about"
@@ -125,7 +150,7 @@ export default function About() {
                 style={{ border: "1px solid var(--card-border)" }}
               >
                 <Image
-                  src="/upd.jpeg"
+                  src={aboutImage}
                   alt="Foto Thomas yang santai dan friendly"
                   fill
                   quality={100}

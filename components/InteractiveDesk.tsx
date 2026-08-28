@@ -3,6 +3,7 @@
 import { useRef, useState, useEffect } from "react";
 import { motion } from "motion/react";
 import Image from "next/image";
+import { supabase } from "@/lib/supabase";
 
 type DeskItem = {
   id: string;
@@ -73,9 +74,44 @@ export default function InteractiveDesk() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
   const [zoomedId, setZoomedId] = useState<string | null>(null);
+  const [deskItems, setDeskItems] = useState<DeskItem[]>(ITEMS);
 
   useEffect(() => {
     setMounted(true);
+    
+    async function fetchDeskImages() {
+      try {
+        const { data } = await supabase
+          .from("gallery")
+          .select("image_url, title")
+          .eq("category", "interactive_desk")
+          .order("created_at", { ascending: true }) // Makanan, random, badminton, gitar
+          .limit(4);
+          
+        if (data && data.length > 0) {
+          setDeskItems(prev => {
+            const newItems = [...prev];
+            let photoIndex = 0;
+            
+            for (let i = 0; i < newItems.length; i++) {
+              if (newItems[i].type === "photo" && data[photoIndex]) {
+                newItems[i] = {
+                  ...newItems[i],
+                  src: data[photoIndex].image_url,
+                  alt: data[photoIndex].title || newItems[i].alt
+                };
+                photoIndex++;
+              }
+            }
+            return newItems;
+          });
+        }
+      } catch (err) {
+        console.error("Error fetching desk images:", err);
+      }
+    }
+    
+    fetchDeskImages();
   }, []);
 
   if (!mounted) return null;
@@ -97,7 +133,7 @@ export default function InteractiveDesk() {
         ref={containerRef}
         className="relative w-full h-[600px] max-w-6xl mx-auto bg-black/5 dark:bg-black/20 rounded-3xl shadow-inner border border-black/10 overflow-hidden"
       >
-        {ITEMS.map((item) => {
+        {deskItems.map((item) => {
           const isZoomed = zoomedId === item.id;
           
           return (

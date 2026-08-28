@@ -8,12 +8,15 @@ import { Instagram, MapPin, GraduationCap } from "lucide-react";
 import { WhatsAppIcon, TikTokIcon } from "@/components/Icons";
 import MagneticButton from "@/components/MagneticButton";
 import TypewriterText from "@/components/TypewriterText";
+import { supabase } from "@/lib/supabase";
 
 export default function Hero() {
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [accessories, setAccessories] = useState<string[]>([]);
+  const [profileImage, setProfileImage] = useState("/upd-foto1.jpeg");
+  const [avatarImage, setAvatarImage] = useState("/foto-thomas2.png");
 
   const toggleAccessory = (acc: string) => {
     setAccessories(prev => prev.includes(acc) ? prev.filter(a => a !== acc) : [...prev, acc]);
@@ -21,6 +24,37 @@ export default function Hero() {
 
   useEffect(() => {
     setMounted(true);
+    
+    // Fetch dynamic images from Supabase
+    async function fetchHeroImages() {
+      try {
+        const { data: heroData } = await supabase
+          .from("gallery")
+          .select("image_url")
+          .eq("category", "hero")
+          .order("created_at", { ascending: false })
+          .limit(1);
+          
+        if (heroData && heroData.length > 0) {
+          setProfileImage(heroData[0].image_url);
+        }
+
+        const { data: avatarData } = await supabase
+          .from("gallery")
+          .select("image_url")
+          .eq("category", "hero_avatar")
+          .order("created_at", { ascending: false })
+          .limit(1);
+          
+        if (avatarData && avatarData.length > 0) {
+          setAvatarImage(avatarData[0].image_url);
+        }
+      } catch (err) {
+        console.error("Error fetching hero images:", err);
+      }
+    }
+    
+    fetchHeroImages();
   }, []);
 
   const handleScroll = (id: string) => {
@@ -289,7 +323,7 @@ export default function Hero() {
               {/* Photo */}
               <div className="relative w-full aspect-[4/5]">
                 <Image
-                  src="/upd-foto1.jpeg"
+                  src={profileImage}
                   alt="Foto profil Thomas"
                   fill
                   quality={100}
@@ -383,7 +417,7 @@ export default function Hero() {
                 <div className="flex items-center gap-3 min-w-0">
                   <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 ring-2 ring-[var(--primary-light)]">
                     <Image
-                      src="/foto-thomas2.png"
+                      src={avatarImage}
                       alt="Avatar Thomas"
                       width={40}
                       height={40}
