@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { motion } from "motion/react";
+import { useUISound } from "@/hooks/useUISound";
 
 export default function MagneticButton({
   children,
@@ -14,6 +15,7 @@ export default function MagneticButton({
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
+  const { playHover, playClick } = useUISound();
 
   const handleMouse = (e: React.MouseEvent<HTMLDivElement>) => {
     const { clientX, clientY } = e;
@@ -27,17 +29,23 @@ export default function MagneticButton({
     setPosition({ x: 0, y: 0 });
   };
 
+  const handleClick = () => {
+    playClick();
+    if (onClick) onClick();
+  };
+
   const { x, y } = position;
 
   return (
     <motion.div
       ref={ref}
       onMouseMove={handleMouse}
+      onMouseEnter={playHover}
       onMouseLeave={reset}
       animate={{ x, y }}
       transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.1 }}
       className={`inline-block ${className}`}
-      onClick={onClick}
+      onClick={handleClick}
     >
       {children}
     </motion.div>
