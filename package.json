@@ -9,8 +9,6 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@splinetool/react-spline": "^4.1.0",
-    "@splinetool/runtime": "^2.0.8",
     "@supabase/supabase-js": "^2.112.4",
     "canvas-confetti": "^1.9.4",
     "lucide-react": "^0.511.0",
