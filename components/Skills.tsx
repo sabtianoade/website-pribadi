@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { skills, Skill, SkillCategory } from "@/data/skills";
-import { Shield, Sword, Eye, Sparkles, X } from "lucide-react";
+import { Shield, Sword, Eye, Sparkles, X, Code, Braces, Wand2, Terminal, Cpu, Layout, Smartphone, FileCode2, Figma } from "lucide-react";
 
 // Particle effect for background
 const PARTICLE_COUNT = 40;
@@ -15,6 +15,18 @@ const particles = Array.from({ length: PARTICLE_COUNT }, (_, i) => ({
   duration: Math.random() * 20 + 10,
   delay: Math.random() * 5,
 }));
+
+const skillIcons: Record<string, any> = {
+  html: Code,
+  css: Layout,
+  tailwind: Wand2,
+  javascript: Braces,
+  react: Cpu,
+  nextjs: Terminal,
+  figma: Figma,
+  uiux: Smartphone,
+  motion: Sparkles,
+};
 
 export default function Skills() {
   const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
@@ -112,8 +124,11 @@ export default function Skills() {
                       {/* Active Node Glow Effect */}
                       <div className="absolute inset-0 rounded-2xl bg-[var(--primary)]/0 group-hover:bg-[var(--primary)]/10 transition-colors" />
                       
-                      <div className="w-10 h-10 rounded-full flex items-center justify-center text-xl bg-[var(--background)] border border-[var(--card-border)] shadow-inner" style={{ borderColor: skill.color }}>
-                        {skill.emoji}
+                      <div className="w-10 h-10 rounded-full flex items-center justify-center text-[var(--foreground)] bg-[var(--background)] border border-[var(--card-border)] shadow-inner" style={{ borderColor: skill.color }}>
+                        {(() => {
+                          const Icon = skillIcons[skill.id] || Code;
+                          return <Icon size={20} />;
+                        })()}
                       </div>
                       <div className="text-left">
                         <p className="font-bold text-sm text-[var(--foreground)] leading-none">{skill.name}</p>
@@ -159,10 +174,13 @@ export default function Skills() {
 
               <div className="flex flex-col items-center text-center mt-4">
                 <div 
-                  className="w-24 h-24 rounded-full flex items-center justify-center text-5xl mb-6 shadow-2xl relative"
-                  style={{ backgroundColor: `${selectedSkill.color}20`, border: `2px solid ${selectedSkill.color}` }}
+                  className="w-24 h-24 rounded-full flex items-center justify-center text-[var(--foreground)] mb-6 shadow-2xl relative"
+                  style={{ backgroundColor: `var(--card)`, border: `2px solid ${selectedSkill.color}` }}
                 >
-                  {selectedSkill.emoji}
+                  {(() => {
+                    const Icon = skillIcons[selectedSkill.id] || Code;
+                    return <Icon size={48} />;
+                  })()}
                   {/* Floating particles around selected icon */}
                   <motion.div animate={{ rotate: 360 }} transition={{ duration: 10, repeat: Infinity, ease: "linear" }} className="absolute inset-[-10px] border border-dashed rounded-full opacity-30" style={{ borderColor: selectedSkill.color }} />
                 </div>
