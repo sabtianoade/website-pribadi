@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { supabase } from "@/lib/supabase";
-import { LogOut, Upload, Trash2, Image as ImageIcon, Loader2, Search, Filter } from "lucide-react";
+import { LogOut, Upload, Trash2, Image as ImageIcon, Loader2, Search, Filter, Edit3, X } from "lucide-react";
 import { logoutAction } from "./actions";
 
 type GalleryItem = {
@@ -27,6 +27,10 @@ export default function AdminDashboard() {
   // Filter & Search State
   const [searchQuery, setSearchQuery] = useState("");
   const [filterCategory, setFilterCategory] = useState("all");
+
+  // Edit State
+  const [editingItem, setEditingItem] = useState<GalleryItem | null>(null);
+  const [isEditSaving, setIsEditSaving] = useState(false);
 
   const filteredItems = items.filter(item => {
     const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase());
@@ -125,6 +129,32 @@ export default function AdminDashboard() {
     } catch (err) {
       console.error("Error deleting:", err);
       alert("Gagal menghapus");
+    }
+  };
+
+  const handleEditSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingItem) return;
+
+    setIsEditSaving(true);
+    try {
+      const { error } = await supabase
+        .from("gallery")
+        .update({
+          title: editingItem.title,
+          category: editingItem.category
+        })
+        .eq("id", editingItem.id);
+
+      if (error) throw error;
+
+      setEditingItem(null);
+      fetchGallery();
+    } catch (err) {
+      console.error("Error updating:", err);
+      alert("Gagal memperbarui data");
+    } finally {
+      setIsEditSaving(false);
     }
   };
 
@@ -278,13 +308,22 @@ export default function AdminDashboard() {
                       <div className="absolute top-2 left-2 bg-black/50 backdrop-blur-md px-2 py-1 rounded text-[10px] text-white font-mono uppercase">
                         {item.category}
                       </div>
-                      <button 
-                        onClick={() => handleDelete(item.id, item.image_url)}
-                        className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:scale-110"
-                        title="Hapus"
-                      >
-                        <Trash2 size={14} />
-                      </button>
+                      <div className="absolute top-2 right-2 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button 
+                          onClick={() => setEditingItem(item)}
+                          className="bg-blue-500 text-white p-2 rounded-full hover:scale-110 transition-transform shadow-md"
+                          title="Edit"
+                        >
+                          <Edit3 size={14} />
+                        </button>
+                        <button 
+                          onClick={() => handleDelete(item.id, item.image_url)}
+                          className="bg-red-500 text-white p-2 rounded-full hover:scale-110 transition-transform shadow-md"
+                          title="Hapus"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
                     </div>
                     <div className="p-4 flex flex-col flex-1">
                       <p className="font-semibold text-sm line-clamp-2" title={item.title}>{item.title}</p>
@@ -299,6 +338,79 @@ export default function AdminDashboard() {
           </div>
         </div>
       </div>
+
+      {/* EDIT MODAL */}
+      {editingItem && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="bg-[var(--card)] border border-[var(--card-border)] p-6 rounded-2xl w-full max-w-md shadow-2xl relative animate-in zoom-in-95 duration-200">
+            <button 
+              onClick={() => setEditingItem(null)}
+              className="absolute top-4 right-4 text-[var(--muted)] hover:text-[var(--foreground)]"
+            >
+              <X size={20} />
+            </button>
+            <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+              <Edit3 size={20} className="text-[var(--primary)]" />
+              Edit Detail Foto
+            </h3>
+            
+            <form onSubmit={handleEditSubmit} className="flex flex-col gap-4">
+              <div>
+                <label className="text-xs font-semibold text-[var(--muted)] uppercase tracking-wider mb-2 block">Judul / Deskripsi</label>
+                <input
+                  type="text"
+                  value={editingItem.title}
+                  onChange={(e) => setEditingItem({...editingItem, title: e.target.value})}
+                  required
+                  className="w-full bg-[var(--background)] border border-[var(--card-border)] rounded-lg px-4 py-2 text-sm outline-none focus:border-[var(--primary)]"
+                />
+              </div>
+
+              <div>
+                <label className="text-xs font-semibold text-[var(--muted)] uppercase tracking-wider mb-2 block">Kategori</label>
+                <select
+                  value={editingItem.category}
+                  onChange={(e) => setEditingItem({...editingItem, category: e.target.value})}
+                  className="w-full bg-[var(--background)] border border-[var(--card-border)] rounded-lg px-4 py-2 text-sm outline-none focus:border-[var(--primary)]"
+                >
+                  <optgroup label="Beranda">
+                    <option value="general">Momen Umum / Galeri</option>
+                    <option value="hero">Hero Background (1 Foto)</option>
+                    <option value="hero_avatar">Hero Avatar (1 Foto)</option>
+                    <option value="about">Tentang Aku Profile (1 Foto)</option>
+                    <option value="hobbies">Hal yang Aku Suka (Bento 6 Foto)</option>
+                    <option value="interactive_desk">Meja Interaktif (4 Foto)</option>
+                    <option value="favorites">Yang Aku Suka Banget (4 Foto)</option>
+                  </optgroup>
+                  <optgroup label="Halaman Rahasia Netha">
+                    <option value="netha">Momen Netha (Galeri Banyak Foto)</option>
+                    <option value="netha_hero">Netha Profile (1 Foto)</option>
+                    <option value="netha_fotbar">You & Me Fotbar (3 Foto)</option>
+                    <option value="netha_drinks">Minuman Favoritnya (1 Foto)</option>
+                  </optgroup>
+                </select>
+              </div>
+
+              <div className="flex gap-3 mt-4">
+                <button
+                  type="button"
+                  onClick={() => setEditingItem(null)}
+                  className="flex-1 py-3 rounded-xl border border-[var(--card-border)] font-semibold hover:bg-[var(--background)] transition-colors"
+                >
+                  Batal
+                </button>
+                <button
+                  type="submit"
+                  disabled={isEditSaving}
+                  className="flex-1 py-3 rounded-xl bg-[var(--primary)] text-white font-bold hover:scale-[1.02] transition-all flex justify-center items-center gap-2"
+                >
+                  {isEditSaving ? <Loader2 className="w-5 h-5 animate-spin" /> : "Simpan"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
