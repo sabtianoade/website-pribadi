@@ -7,13 +7,18 @@ import { Shield, Sword, Eye, Sparkles, X, Code, Braces, Wand2, Terminal, Cpu, La
 
 // Particle effect for background
 const PARTICLE_COUNT = 40;
+const getSeededRandom = (seed: number) => {
+  const x = Math.sin(seed) * 10000;
+  return x - Math.floor(x);
+};
+
 const particles = Array.from({ length: PARTICLE_COUNT }, (_, i) => ({
   id: i,
-  x: Math.random() * 100,
-  y: Math.random() * 100,
-  size: Math.random() * 3 + 1,
-  duration: Math.random() * 20 + 10,
-  delay: Math.random() * 5,
+  x: getSeededRandom(i + 1) * 100,
+  y: getSeededRandom(i + 2) * 100,
+  size: getSeededRandom(i + 3) * 3 + 1,
+  duration: getSeededRandom(i + 4) * 20 + 10,
+  delay: getSeededRandom(i + 5) * 5,
 }));
 
 const skillIcons: Record<string, any> = {
