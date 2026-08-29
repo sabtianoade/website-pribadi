@@ -27,7 +27,20 @@ const factIcons: Record<string, React.ElementType> = {
   f8: Gamepad2,
 };
 
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
+
 export default function RandomFacts() {
+  const [factsDesc, setFactsDesc] = useState("Hal-hal yang mungkin nggak perlu kamu tahu, tapi sekarang kamu tahu.");
+
+  useEffect(() => {
+    async function fetchSettings() {
+      const { data } = await supabase.from("site_settings").select("value").eq("id", "random_facts_desc").single();
+      if (data?.value) setFactsDesc(data.value);
+    }
+    fetchSettings();
+  }, []);
+
   return (
     <section
       id="facts"
@@ -48,7 +61,7 @@ export default function RandomFacts() {
             <span className="gradient-text">Tentang Aku</span>
           </h2>
           <p style={{ color: "var(--muted)" }} className="text-base max-w-md">
-            Hal-hal yang mungkin nggak perlu kamu tahu, tapi sekarang kamu tahu.
+            {factsDesc}
           </p>
         </motion.div>
 

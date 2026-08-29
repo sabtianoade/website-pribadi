@@ -4,8 +4,20 @@ import { motion } from "motion/react";
 import { Instagram } from "lucide-react";
 import { WhatsAppIcon, TikTokIcon } from "@/components/Icons";
 
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
+
 export default function Footer() {
+  const [footerText, setFooterText] = useState("Dibuat dengan ❤️ oleh Thomas");
   const year = new Date().getFullYear();
+
+  useEffect(() => {
+    async function fetchSettings() {
+      const { data } = await supabase.from("site_settings").select("value").eq("id", "footer_text").single();
+      if (data?.value) setFooterText(data.value);
+    }
+    fetchSettings();
+  }, []);
 
   return (
     <footer
@@ -27,7 +39,7 @@ export default function Footer() {
             thomas<span style={{ color: "var(--accent)" }}>.</span>
           </span>
           <p className="text-sm" style={{ color: "var(--muted)" }}>
-            Dibuat dengan ❤️ oleh Thomas · {year}
+            {footerText} · {year}
           </p>
         </motion.div>
 

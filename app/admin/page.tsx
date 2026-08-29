@@ -19,6 +19,10 @@ type SiteSettings = {
   hero_title: string;
   hero_subtitle: string;
   about_description: string;
+  footer_text: string;
+  hobbies_title: string;
+  hobbies_subtitle: string;
+  random_facts_desc: string;
   theme_primary_color: string;
 };
 
@@ -53,6 +57,10 @@ export default function AdminDashboard() {
     hero_title: "",
     hero_subtitle: "",
     about_description: "",
+    footer_text: "Dibuat dengan ❤️ oleh Thomas",
+    hobbies_title: 'Hal yang <span class="gradient-text">Aku Suka</span>',
+    hobbies_subtitle: "Beberapa hal yang suka aku lakukan di waktu luang.",
+    random_facts_desc: "Beberapa fakta acak tentang diriku yang mungkin (tidak) ingin kamu ketahui.",
     theme_primary_color: "#333333"
   });
   const [settingsLoading, setSettingsLoading] = useState(true);
@@ -535,6 +543,52 @@ export default function AdminDashboard() {
                           className="w-full bg-[var(--card)] border border-[var(--card-border)] rounded-2xl px-6 py-5 font-medium outline-none focus:border-[var(--primary)] resize-none transition-all shadow-sm focus:shadow-[0_0_0_4px_var(--primary)] leading-relaxed text-lg"
                         />
                         <p className="text-[11px] font-bold text-[var(--muted)] uppercase mt-2 flex items-center gap-1.5"><Info size={14}/> Mendukung teks yang panjang. Buat sapaan yang hangat!</p>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
+                        <div className="flex flex-col gap-3">
+                          <label className="text-xs font-black text-[var(--muted)] uppercase tracking-widest">Judul Hobi</label>
+                          <input 
+                            type="text" 
+                            value={settings.hobbies_title}
+                            onChange={(e) => setSettings({ ...settings, hobbies_title: e.target.value })}
+                            placeholder="Hobi & Ketertarikan"
+                            className="w-full bg-[var(--card)] border border-[var(--card-border)] rounded-2xl px-6 py-4 font-bold outline-none focus:border-[var(--primary)] transition-all shadow-sm focus:shadow-[0_0_0_4px_var(--primary)]"
+                          />
+                        </div>
+                        <div className="flex flex-col gap-3">
+                          <label className="text-xs font-black text-[var(--muted)] uppercase tracking-widest">Sub-Judul Hobi</label>
+                          <input 
+                            type="text" 
+                            value={settings.hobbies_subtitle}
+                            onChange={(e) => setSettings({ ...settings, hobbies_subtitle: e.target.value })}
+                            placeholder="Beberapa hal yang suka aku lakukan..."
+                            className="w-full bg-[var(--card)] border border-[var(--card-border)] rounded-2xl px-6 py-4 font-bold outline-none focus:border-[var(--primary)] transition-all shadow-sm focus:shadow-[0_0_0_4px_var(--primary)]"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
+                        <div className="flex flex-col gap-3">
+                          <label className="text-xs font-black text-[var(--muted)] uppercase tracking-widest">Teks Fakta Acak</label>
+                          <input 
+                            type="text" 
+                            value={settings.random_facts_desc}
+                            onChange={(e) => setSettings({ ...settings, random_facts_desc: e.target.value })}
+                            placeholder="Beberapa fakta acak tentang diriku..."
+                            className="w-full bg-[var(--card)] border border-[var(--card-border)] rounded-2xl px-6 py-4 font-bold outline-none focus:border-[var(--primary)] transition-all shadow-sm focus:shadow-[0_0_0_4px_var(--primary)]"
+                          />
+                        </div>
+                        <div className="flex flex-col gap-3">
+                          <label className="text-xs font-black text-[var(--muted)] uppercase tracking-widest">Teks Footer</label>
+                          <input 
+                            type="text" 
+                            value={settings.footer_text}
+                            onChange={(e) => setSettings({ ...settings, footer_text: e.target.value })}
+                            placeholder="Dibuat dengan ❤️ oleh Thomas"
+                            className="w-full bg-[var(--card)] border border-[var(--card-border)] rounded-2xl px-6 py-4 font-bold outline-none focus:border-[var(--primary)] transition-all shadow-sm focus:shadow-[0_0_0_4px_var(--primary)]"
+                          />
+                        </div>
                       </div>
                     </div>
 

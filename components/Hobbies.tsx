@@ -20,10 +20,20 @@ export default function Hobbies() {
   const [hobbyImages, setHobbyImages] = useState<string[]>([
     "/badmin.jpeg", "/musik.jpeg", "/padel.jpeg", "/gitar.jpeg", "/bikinkopi.jpeg", "/coding.jpeg"
   ]);
+  const [hobbiesTitle, setHobbiesTitle] = useState("Hal yang Aku Suka");
+  const [hobbiesSubtitle, setHobbiesSubtitle] = useState("Kumpulan aktivitas yang selalu bikin aku semangat, apapun situasinya.");
 
   useEffect(() => {
-    async function fetchHobbyImages() {
+    async function fetchHobbyData() {
       try {
+        const { data: settingsData } = await supabase.from("site_settings").select("*");
+        if (settingsData) {
+          const t = settingsData.find(s => s.id === "hobbies_title")?.value;
+          const s = settingsData.find(s => s.id === "hobbies_subtitle")?.value;
+          if (t) setHobbiesTitle(t);
+          if (s) setHobbiesSubtitle(s);
+        }
+
         const { data } = await supabase
           .from("gallery")
           .select("image_url")
@@ -40,11 +50,11 @@ export default function Hobbies() {
           setHobbyImages(newImages);
         }
       } catch (err) {
-        console.error("Error fetching hobby images:", err);
+        console.error("Error fetching hobbies:", err);
       }
     }
     
-    fetchHobbyImages();
+    fetchHobbyData();
   }, []);
 
   return (
@@ -62,12 +72,9 @@ export default function Hobbies() {
           transition={{ duration: 0.6 }}
           className="mb-12"
         >
-          <h2 className="text-4xl md:text-5xl font-black mb-3">
-            Hal yang{" "}
-            <span className="gradient-text">Aku Suka</span>
-          </h2>
+          <h2 className="text-4xl md:text-5xl font-black mb-3" dangerouslySetInnerHTML={{ __html: hobbiesTitle }} />
           <p style={{ color: "var(--muted)" }} className="text-base max-w-md">
-            Kumpulan aktivitas yang selalu bikin aku semangat, apapun situasinya.
+            {hobbiesSubtitle}
           </p>
         </motion.div>
 

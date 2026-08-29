@@ -14,6 +14,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://sabtiano.vercel.app"),
   title: "Thomas — Ruang Pribadiku",
   description:
     "Selamat datang di sudut kecilku di internet. Kenali aku — hobi, favorit, kepribadian, dan lebih banyak lagi.",
@@ -21,8 +22,15 @@ export const metadata: Metadata = {
   authors: [{ name: "Thomas" }],
   openGraph: {
     title: "Thomas — Ruang Pribadiku",
-    description: "Selamat datang di sudut kecilku di internet.",
+    description: "Selamat datang di sudut kecilku di internet. Kenali aku — hobi, favorit, kepribadian, dan lebih banyak lagi.",
+    url: "https://sabtiano.vercel.app",
+    siteName: "Thomas Portfolio",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Thomas — Ruang Pribadiku",
+    description: "Selamat datang di sudut kecilku di internet.",
   },
 };
 
