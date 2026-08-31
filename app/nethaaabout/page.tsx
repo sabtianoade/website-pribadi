@@ -3,7 +3,7 @@
 import { motion, useScroll, useTransform, AnimatePresence } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, Heart, Coffee, MessageCircleHeart, Music, Play, Pause, Mail, MailOpen, Lock } from "lucide-react";
+import { ArrowLeft, Heart, Coffee, MessageCircleHeart, Music, Play, Pause, Mail, MailOpen, Lock, ChevronLeft, ChevronRight } from "lucide-react";
 import Tilt from "react-parallax-tilt";
 import confetti from "canvas-confetti";
 import { useState, useRef, useEffect } from "react";
@@ -33,8 +33,9 @@ export default function AyangPage() {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [photos, setPhotos] = useState<Array<{ src: string, alt: string, rotate: number, isComingSoon?: boolean }>>([]);
   const [nethaHero, setNethaHero] = useState("/profil-netha.jpeg");
-  const [nethaFotbar, setNethaFotbar] = useState(["/fotbar-1.jpeg", "/fotbar-2.jpeg", "/fotbar-3.jpeg"]);
+  const [nethaFotbar, setNethaFotbar] = useState<string[]>([]);
   const [nethaDrinks, setNethaDrinks] = useState(defaultDrinks);
+  const [activeFotbarIndex, setActiveFotbarIndex] = useState<number | null>(null);
 
   // Fetch Netha photos from Supabase
   useEffect(() => {
@@ -69,15 +70,15 @@ export default function AyangPage() {
         if (heroData && heroData.length > 0) setNethaHero(heroData[0].image_url);
 
         // Fetch netha_fotbar
-        const { data: fotbarData } = await supabase.from("gallery").select("image_url").eq("category", "netha_fotbar").order("created_at", { ascending: true }).limit(3);
+        const { data: fotbarData } = await supabase.from("gallery").select("image_url").eq("category", "netha_fotbar").order("created_at", { ascending: true });
         if (fotbarData && fotbarData.length > 0) {
-          setNethaFotbar(prev => {
-            const newFotbar = [...prev];
-            for (let i = 0; i < fotbarData.length; i++) {
-              newFotbar[i] = fotbarData[i].image_url;
-            }
-            return newFotbar;
-          });
+          const urls = fotbarData.map(item => item.image_url);
+          setNethaFotbar(urls);
+          // Default to the newest card (last in array)
+          setActiveFotbarIndex(urls.length - 1);
+        } else {
+          setNethaFotbar(["/fotbar-1.jpeg", "/fotbar-2.jpeg", "/fotbar-3.jpeg"]);
+          setActiveFotbarIndex(2);
         }
 
         // Fetch netha_drinks
@@ -94,7 +95,17 @@ export default function AyangPage() {
         console.error("Error fetching netha photos:", err);
       }
     }
+
     fetchNethaPhotos();
+
+    const handleFocus = () => fetchNethaPhotos();
+    window.addEventListener("focus", handleFocus);
+    window.addEventListener("visibilitychange", handleFocus);
+
+    return () => {
+      window.removeEventListener("focus", handleFocus);
+      window.removeEventListener("visibilitychange", handleFocus);
+    };
   }, []);
 
   // Scroll animations for video background reveal
@@ -285,39 +296,94 @@ export default function AyangPage() {
 
         {/* Us Section */}
         <section className="mb-32">
-          <div className="flex items-center justify-center gap-3 mb-12">
-            <h2 className="text-2xl font-bold text-[var(--foreground)]">You & Me</h2>
+          <div className="flex flex-col items-center justify-center gap-2 mb-12">
+            <h2 className="text-2xl md:text-3xl font-bold text-[var(--foreground)]">You & Me</h2>
+            <p className="text-xs md:text-sm text-[var(--muted)] font-mono">Klik / Tap kartu mana saja untuk membawanya ke depan!</p>
           </div>
           
-          <div className="relative flex justify-center items-center h-[350px] md:h-[550px] mt-10">
-            {nethaFotbar.map((src, i) => (
-              <motion.div
-                key={i}
-                tabIndex={0}
-                initial={{ opacity: 0, scale: 0.8, rotate: 0, x: 0 }}
-                whileInView={{ opacity: 1, scale: 1, rotate: (i - 1) * 10, x: (i - 1) * 50 }}
-                viewport={{ once: true }}
-                whileHover={{ scale: 1.05, rotate: (i - 1) * 15, zIndex: 50, y: -20, x: (i - 1) * 90 }}
-                whileFocus={{ scale: 1.05, rotate: (i - 1) * 15, zIndex: 50, y: -20, x: (i - 1) * 90 }}
-                whileTap={{ scale: 1.05, rotate: (i - 1) * 15, zIndex: 50, y: -20, x: (i - 1) * 90 }}
-                transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                className="absolute bg-[var(--card)] p-2 md:p-4 pb-10 md:pb-16 rounded-xl md:rounded-[1.5rem] shadow-2xl border border-[var(--card-border)] w-[160px] md:w-[320px] origin-bottom cursor-pointer hover:border-[var(--primary)] focus:border-[var(--primary)] outline-none transition-colors duration-300"
-                style={{ zIndex: i * 10 }}
-              >
-                <div className="relative w-full aspect-[4/5] overflow-hidden bg-black/20 rounded-xl pointer-events-none">
-                  <Image 
-                    src={src}
-                    alt="Kita Berdua"
-                    fill
-                    className="object-cover opacity-90 group-hover:opacity-100 transition-opacity"
-                  />
-                </div>
-                <div className="absolute bottom-3 md:bottom-5 left-0 w-full text-center pointer-events-none">
-                  <p className="font-mono text-[var(--muted)] text-sm md:text-lg font-bold">Memori #{i + 1}</p>
-                </div>
-              </motion.div>
-            ))}
+          <div className="relative flex justify-center items-center h-[380px] md:h-[550px] mt-6">
+            {nethaFotbar.map((src, i) => {
+              const total = nethaFotbar.length;
+              const centerIndex = (total - 1) / 2;
+              const isSelected = activeFotbarIndex === i || (activeFotbarIndex === null && i === total - 1);
+              
+              const offset = i - centerIndex;
+              const defaultZ = i * 10;
+              const zIndex = isSelected ? 100 : (activeFotbarIndex !== null && i > activeFotbarIndex ? defaultZ + 5 : defaultZ);
+
+              return (
+                <motion.div
+                  key={i}
+                  tabIndex={0}
+                  onClick={() => setActiveFotbarIndex(i)}
+                  initial={{ opacity: 0, scale: 0.8, rotate: 0, x: 0 }}
+                  whileInView={{
+                    opacity: 1,
+                    scale: isSelected ? 1.12 : 1,
+                    rotate: isSelected ? 0 : offset * 7,
+                    x: isSelected ? 0 : offset * 32,
+                    y: isSelected ? -25 : 0
+                  }}
+                  viewport={{ once: true }}
+                  whileHover={{ scale: isSelected ? 1.15 : 1.06, zIndex: 120, y: -20 }}
+                  whileTap={{ scale: 1.02 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 22 }}
+                  className={`absolute bg-[var(--card)] p-2 md:p-4 pb-10 md:pb-16 rounded-xl md:rounded-[1.5rem] shadow-2xl border transition-all duration-300 w-[170px] md:w-[320px] origin-bottom cursor-pointer outline-none ${
+                    isSelected ? "border-[var(--primary)] shadow-[0_0_40px_rgba(255,105,180,0.5)] ring-2 ring-[var(--primary)]" : "border-[var(--card-border)] hover:border-[var(--primary)]"
+                  }`}
+                  style={{ zIndex }}
+                >
+                  <div className="relative w-full aspect-[4/5] overflow-hidden bg-black/20 rounded-xl pointer-events-none">
+                    <Image 
+                      src={src}
+                      alt={`Kita Berdua #${i + 1}`}
+                      fill
+                      unoptimized
+                      className="object-cover opacity-95 group-hover:opacity-100 transition-opacity"
+                    />
+                  </div>
+                  <div className="absolute bottom-3 md:bottom-5 left-0 w-full text-center pointer-events-none">
+                    <p className="font-mono text-[var(--muted)] text-xs md:text-lg font-bold">
+                      Memori #{i + 1} {i === nethaFotbar.length - 1 ? "✨ (Terbaru)" : ""}
+                    </p>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
+
+          {/* Navigation Controls for Fotbar */}
+          {nethaFotbar.length > 1 && (
+            <div className="flex items-center justify-center gap-4 mt-8">
+              <button
+                onClick={() => setActiveFotbarIndex(prev => prev === null || prev <= 0 ? nethaFotbar.length - 1 : prev - 1)}
+                className="p-3 rounded-full bg-[var(--card)] border border-[var(--card-border)] text-[var(--foreground)] hover:border-[var(--primary)] transition-all shadow-md active:scale-95 cursor-pointer"
+                title="Foto Sebelumnya"
+              >
+                <ChevronLeft size={20} />
+              </button>
+              <div className="flex gap-2">
+                {nethaFotbar.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setActiveFotbarIndex(idx)}
+                    className={`h-2.5 rounded-full transition-all cursor-pointer ${
+                      (activeFotbarIndex === idx || (activeFotbarIndex === null && idx === nethaFotbar.length - 1))
+                        ? "bg-[var(--primary)] w-7"
+                        : "bg-[var(--muted)]/40 hover:bg-[var(--muted)] w-2.5"
+                    }`}
+                  />
+                ))}
+              </div>
+              <button
+                onClick={() => setActiveFotbarIndex(prev => prev === null || prev >= nethaFotbar.length - 1 ? 0 : prev + 1)}
+                className="p-3 rounded-full bg-[var(--card)] border border-[var(--card-border)] text-[var(--foreground)] hover:border-[var(--primary)] transition-all shadow-md active:scale-95 cursor-pointer"
+                title="Foto Selanjutnya"
+              >
+                <ChevronRight size={20} />
+              </button>
+            </div>
+          )}
         </section>
 
         {/* Gallery Section */}
@@ -355,6 +421,7 @@ export default function AyangPage() {
                         src={photo.src}
                         alt={photo.alt}
                         fill
+                        unoptimized
                         className="object-cover opacity-80 group-hover:opacity-100 grayscale-[0.2] group-hover:grayscale-0 transition-all duration-500"
                       />
                     )}

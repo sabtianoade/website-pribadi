@@ -136,21 +136,91 @@ export default function AdminDashboard() {
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
+  const compressImage = (file: File): Promise<{ file: File }> => {
+    return new Promise((resolve, reject) => {
+      const img = document.createElement("img");
+      const url = URL.createObjectURL(file);
+
+      img.onload = () => {
+        URL.revokeObjectURL(url);
+        const canvas = document.createElement("canvas");
+        let width = img.width;
+        let height = img.height;
+
+        const maxDimension = 1920;
+        if (width > maxDimension || height > maxDimension) {
+          if (width > height) {
+            height = Math.round((height * maxDimension) / width);
+            width = maxDimension;
+          } else {
+            width = Math.round((width * maxDimension) / height);
+            height = maxDimension;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        if (ctx) {
+          ctx.drawImage(img, 0, 0, width, height);
+          canvas.toBlob(
+            (blob) => {
+              if (blob) {
+                const cleanName = file.name.replace(/\.(heic|heif|png|jpeg|jpg|webp)$/i, ".jpg");
+                const newFile = new File([blob], cleanName, { type: "image/jpeg" });
+                resolve({ file: newFile });
+              } else {
+                resolve({ file });
+              }
+            },
+            "image/jpeg",
+            0.85
+          );
+        } else {
+          resolve({ file });
+        }
+      };
+
+      img.onerror = () => {
+        URL.revokeObjectURL(url);
+        // If image decoding fails (e.g. unsupported raw HEIC on some desktop browsers)
+        resolve({ file });
+      };
+
+      img.src = url;
+    });
+  };
+
   const handleUpload = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!uploadFile || !title) return;
     
     setUploading(true);
     setUploadError("");
-    
-    const fileExt = uploadFile.name.split('.').pop();
-    const fileName = `${Math.random().toString(36).substring(2, 15)}_${Date.now()}.${fileExt}`;
-    const filePath = `uploads/${fileName}`;
 
     try {
+      // Process and compress image file (resizes large HP photos, converts to JPEG)
+      let fileToUpload: File = uploadFile;
+      let contentType = uploadFile.type || "image/jpeg";
+
+      try {
+        const compressed = await compressImage(uploadFile);
+        fileToUpload = compressed.file;
+        contentType = "image/jpeg";
+      } catch (e) {
+        console.warn("Compression skipped, uploading original file", e);
+      }
+      
+      const fileExt = fileToUpload.name.split('.').pop()?.toLowerCase() || 'jpg';
+      const fileName = `${Math.random().toString(36).substring(2, 15)}_${Date.now()}.${fileExt}`;
+      const filePath = `uploads/${fileName}`;
+
       const { error: uploadErrorData } = await supabase.storage
         .from("photos")
-        .upload(filePath, uploadFile);
+        .upload(filePath, fileToUpload, {
+          contentType: contentType,
+          upsert: true
+        });
 
       if (uploadErrorData) throw uploadErrorData;
 
@@ -169,7 +239,7 @@ export default function AdminDashboard() {
       clearFile();
       fetchGallery(); 
     } catch (err: any) {
-      setUploadError(err.message || "Gagal mengunggah foto");
+      setUploadError(err.message || "Gagal mengunggah foto. Pastikan ukuran file tidak terlalu besar dan format berupa JPG/PNG/WebP.");
     } finally {
       setUploading(false);
     }
